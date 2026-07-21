@@ -1,0 +1,21 @@
+{
+  "name": "GourmetAI - Dijital Mutfak Asistanı",
+  "short_name": "GourmetAI",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#faf9f6",
+  "theme_color": "#ea580c",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3448/3448609.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3448/3448609.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

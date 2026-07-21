@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GourmetAI - Dijital Mutfak Asistanı</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .chat-scroll::-webkit-scrollbar { width: 5px; }
+        .chat-scroll::-webkit-scrollbar-track { background: transparent; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+    <!-- PWA Manifest ve Mobil Uyumluluk Etiketleri -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ea580c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3448/3448609.png">
+</head>
+<body class="bg-[#faf9f6] text-[#2d2a26] min-h-screen flex flex-col justify-between">
+
+    <!-- 🍽️ HEADER -->
+    <header class="bg-white border-b border-orange-100 shadow-xs py-4 px-6 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <span class="text-3xl">👨‍🍳</span>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight text-orange-600">GourmetAI</h1>
+                <p class="text-xs text-gray-400">70B Akıllı Mutfak Robotu</p>
+            </div>
+        </div>
+        
+        <!-- Dosya Yükleme Alanı -->
+        <div class="flex items-center gap-2">
+            <label class="cursor-pointer bg-orange-50 hover:bg-orange-100 border border-orange-200 text-orange-700 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2">
+                📄 Tarif Listesi Yükle
+                <input type="file" id="menuFileInput" accept=".txt" class="hidden" onchange="uploadMenuFile()">
+            </label>
+            <span id="uploadStatus" class="text-xs font-medium text-gray-500"></span>
+        </div>
+    </header>
+
+    <!-- 💬 CHAT ARENASI -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 flex flex-col justify-between overflow-hidden">
+        
+        <!-- Hoş Geldiniz Kartı / Chat Geçmişi -->
+        <div id="chatWindow" class="flex-1 bg-white border border-gray-100 rounded-2xl shadow-sm p-4 md:p-6 overflow-y-auto chat-scroll flex flex-col gap-4 mb-4">
+            
+            <!-- Karşılama Mesajı -->
+            <div class="flex gap-3 max-w-[85%] self-start">
+                <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-sm shadow-xs">👨‍🍳</div>
+                <div class="bg-orange-50 text-gray-800 rounded-2xl rounded-tl-xs p-4 border border-orange-100/50 text-sm leading-relaxed shadow-xs">
+                    Merhaba! Ben restoranımızın dijital şef asistanıyım. Tarif listemizi yukarıdan yüklediyseniz, yemeklerin yapılışları, malzemeleri ve gizli lezzet sırları hakkında bana her şeyi sorabilirsiniz! 🍲
+                </div>
+            </div>
+
+        </div>
+
+        <!-- İNPUT ALANI -->
+        <div class="bg-white border border-gray-100 rounded-2xl shadow-md p-2 flex items-center gap-2">
+            <input type="text" id="userInput" placeholder="Şefe bir soru sorun... (Örn: Hünkar beğendi nasıl yapılır?)" 
+                   class="flex-1 bg-transparent px-4 py-3 text-sm text-gray-800 focus:outline-hidden"
+                   onkeydown="if(event.key === 'Enter') sendMessage()">
+            
+            <button onclick="sendMessage()" class="bg-orange-600 hover:bg-orange-700 text-white px-5 py-3 rounded-xl text-sm font-semibold tracking-wide transition shadow-sm cursor-pointer">
+                Sor
+            </button>
+        </div>
+
+    </main>
+
+    <!-- 🖥️ JAVASCRIPT MOTORU -->
+    <script>
+        // ✅ API_BASE_URL boş bırakıldı; böylece uygulama açıldığı kendi adresi üzerinden istek atar.
+        const API_BASE_URL = ""; 
+
+        // 📤 DOSYA YÜKLEME FONKSİYONU
+        async function uploadMenuFile() {
+            const fileInput = document.getElementById("menuFileInput");
+            const statusSpan = document.getElementById("uploadStatus");
+            
+            if (fileInput.files.length === 0) return;
+            
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+            
+            statusSpan.innerText = "⏳ Yükleniyor...";
+            statusSpan.className = "text-xs font-medium text-amber-600";
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/upload-pdf/`, {
+                    method: "POST",
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    statusSpan.innerText = "✅ Tarifler Aktif!";
+                    statusSpan.className = "text-xs font-medium text-green-600";
+                    appendSystemMessage("Tarif listeniz sisteme başarıyla yüklendi! Artık menüye göre yemek tariflerini sorgulayabilirsiniz. 🍽️");
+                } else {
+                    statusSpan.innerText = "❌ Hata Oluştu";
+                    statusSpan.className = "text-xs font-medium text-red-600";
+                }
+            } catch (error) {
+                console.error("Yükleme hatası:", error);
+                statusSpan.innerText = "❌ Sunucu Bağlantı Hatası";
+                statusSpan.className = "text-xs font-medium text-red-600";
+            }
+        }
+
+        // 💬 MESAJ GÖNDERME FONKSİYONU
+        async function sendMessage() {
+            const inputElement = document.getElementById("userInput");
+            const query = inputElement.value.trim();
+            if (!query) return;
+
+            // Kullanıcı mesajını ekrana bas
+            appendUserMessage(query);
+            inputElement.value = "";
+
+            // Bot için bekleme animasyonu (loading) ekle
+            const loadingId = appendLoadingMessage();
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/ask/?question=${encodeURIComponent(query)}`, {
+                    method: "POST"
+                });
+                
+                const data = await response.json();
+                
+                // Loading animasyonunu kaldır
+                document.getElementById(loadingId).remove();
+
+                if (response.ok) {
+                    appendBotMessage(data.answer);
+                } else {
+                    appendBotMessage("Üzgünüm, şu an mutfakta bir sorun oluştu. Lütfen tekrar deneyin.");
+                }
+            } catch (error) {
+                console.error("Sorgu hatası:", error);
+                document.getElementById(loadingId).remove();
+                appendBotMessage("Sunucuya bağlanılamadı. Lütfen FastAPI uygulamanızın çalıştığından emin olun.");
+            }
+        }
+
+        // 🛠️ YARDIMCI GÖRSEL FONKSİYONLAR
+        const chatWindow = document.getElementById("chatWindow");
+
+        function appendUserMessage(text) {
+            const msgHtml = `
+                <div class="flex gap-3 max-w-[85%] self-end flex-row-reverse">
+                    <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center text-sm shadow-xs">👤</div>
+                    <div class="bg-gray-800 text-white rounded-2xl rounded-tr-xs p-4 text-sm leading-relaxed shadow-sm">
+                        ${text}
+                    </div>
+                </div>`;
+            chatWindow.insertAdjacentHTML('beforeend', msgHtml);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function appendBotMessage(text) {
+            const msgHtml = `
+                <div class="flex gap-3 max-w-[85%] self-start">
+                    <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-sm shadow-xs">👨‍🍳</div>
+                    <div class="bg-orange-50 text-gray-800 rounded-2xl rounded-tl-xs p-4 border border-orange-100/50 text-sm leading-relaxed shadow-xs">
+                        ${text.replace(/\n/g, '<br>')}
+                    </div>
+                </div>`;
+            chatWindow.insertAdjacentHTML('beforeend', msgHtml);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function appendSystemMessage(text) {
+            const msgHtml = `
+                <div class="w-full text-center my-2">
+                    <span class="bg-green-50 text-green-700 text-xs px-3 py-1.5 rounded-full border border-green-200 font-medium">
+                        ${text}
+                    </span>
+                </div>`;
+            chatWindow.insertAdjacentHTML('beforeend', msgHtml);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function appendLoadingMessage() {
+            const id = "loading_" + Date.now();
+            const msgHtml = `
+                <div id="${id}" class="flex gap-3 max-w-[85%] self-start items-center">
+                    <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-sm shadow-xs">👨‍🍳</div>
+                    <div class="text-xs text-gray-400 font-medium flex items-center gap-1.5 bg-gray-50 px-3 py-2 rounded-full border border-gray-100">
+                        <span class="animate-bounce">●</span><span class="animate-bounce [animation-delay:0.2s]">●</span><span class="animate-bounce [animation-delay:0.4s]">●</span> Şef düşünüyor...
+                    </div>
+                </div>`;
+            chatWindow.insertAdjacentHTML('beforeend', msgHtml);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            return id;
+        }
+
+        // PWA Service Worker Kaydı
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('✅ PWA Başarıyla Kaydedildi!'))
+                    .catch(err => console.log('❌ PWA Hatası:', err));
+            });
+        }
+    </script>
+</body>
+</html>
