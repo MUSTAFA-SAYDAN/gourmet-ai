@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import sys
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -41,27 +42,43 @@ llm = ChatGroq(
     groq_api_key=GROQ_API_KEY
 )
 
-# recipes.json Verisini Yükle
-with open("recipes.json", "r", encoding="utf-8") as f:
-    RECIPES = json.load(f)
+# recipes.json Verisini Esnek ve Güvenli Yükle
+RECIPES = []
+try:
+    with open("recipes.json", "r", encoding="utf-8") as f:
+        raw_data = json.load(f)
+        if isinstance(raw_data, list):
+            RECIPES = raw_data
+        elif isinstance(raw_data, dict):
+            RECIPES = next((v for v in raw_data.values() if isinstance(v, list)), [raw_data])
+    print(f"✅ {len(RECIPES)} adet tarif başarıyla yüklendi.", flush=True)
+except Exception as e:
+    print(f"❌ recipes.json okuma hatası: {e}", flush=True)
 
 def find_best_recipe(query: str):
-    """Soru ile en alakalı tarifi recipes.json içinden bulur."""
+    """Soru ile en alakalı tarifi recipes.json içinden esnek biçimde bulur."""
+    if not RECIPES:
+        return None
+
     query_words = set(re.findall(r'\w+', query.lower()))
     best_match = None
     best_score = -1
 
     for item in RECIPES:
-        name = item.get("tarif_adi", item.get("name", ""))
+        if not isinstance(item, dict):
+            continue
+            
+        name = str(item.get("tarif_adi", item.get("name", "")))
         ingredients = item.get("malzemeler", item.get("ingredients", []))
         
-        text_to_search = f"{name} {' '.join(ingredients) if isinstance(ingredients, list) else ingredients}".lower()
+        ing_str = " ".join(ingredients) if isinstance(ingredients, list) else str(ingredients)
+        text_to_search = f"{name} {ing_str}".lower()
         
         score = 0
         for word in query_words:
             if len(word) > 2 and word in text_to_search:
                 if word in name.lower():
-                    score += 3  # Başlıkta geçiyorsa ekstra puan
+                    score += 3
                 else:
                     score += 1
         
@@ -106,4 +123,5 @@ async def ask_question(question: str):
         return {"answer": response.strip()}
         
     except Exception as e:
+        print(f"❌ TAM HATA DETAYI: {e}", flush=True)
         raise HTTPException(status_code=500, detail=str(e))
