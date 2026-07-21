@@ -1,7 +1,6 @@
 import os
 import json
 import re
-import sys
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -55,6 +54,12 @@ try:
 except Exception as e:
     print(f"❌ recipes.json okuma hatası: {e}", flush=True)
 
+def stringify_item(item):
+    """Obje, sözlük veya metin olan veriyi güvenli bir şekilde metne dönüştürür."""
+    if isinstance(item, dict):
+        return " ".join(str(v) for v in item.values())
+    return str(item)
+
 def find_best_recipe(query: str):
     """Soru ile en alakalı tarifi recipes.json içinden esnek biçimde bulur."""
     if not RECIPES:
@@ -71,7 +76,12 @@ def find_best_recipe(query: str):
         name = str(item.get("tarif_adi", item.get("name", "")))
         ingredients = item.get("malzemeler", item.get("ingredients", []))
         
-        ing_str = " ".join(ingredients) if isinstance(ingredients, list) else str(ingredients)
+        # Güvenli malzeme birleştirme
+        if isinstance(ingredients, list):
+            ing_str = " ".join([stringify_item(i) for i in ingredients])
+        else:
+            ing_str = stringify_item(ingredients)
+            
         text_to_search = f"{name} {ing_str}".lower()
         
         score = 0
@@ -93,8 +103,16 @@ def find_best_recipe(query: str):
     ingredients = best_match.get("malzemeler", best_match.get("ingredients", []))
     steps = best_match.get("yapilis_adimlari", best_match.get("steps", []))
     
-    ing_text = "\n".join([f"- {i}" for i in ingredients]) if isinstance(ingredients, list) else str(ingredients)
-    step_text = "\n".join([f"{idx+1}. {s}" for idx, s in enumerate(steps)]) if isinstance(steps, list) else str(steps)
+    # Güvenli Liste Çıktıları
+    if isinstance(ingredients, list):
+        ing_text = "\n".join([f"- {stringify_item(i)}" for i in ingredients])
+    else:
+        ing_text = stringify_item(ingredients)
+        
+    if isinstance(steps, list):
+        step_text = "\n".join([f"{idx+1}. {stringify_item(s)}" for idx, s in enumerate(steps)])
+    else:
+        step_text = stringify_item(steps)
     
     return f"TARİF ADI: {name}\n\nMALZEMELER:\n{ing_text}\n\nYAPILIŞI:\n{step_text}"
 
