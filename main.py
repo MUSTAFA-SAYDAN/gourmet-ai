@@ -34,7 +34,7 @@ async def sw():
 # -----------------------------------------------------
 
 # 🔑 GROQ API BAĞLANTISI
-GROQ_API_KEY = "GROQ_API_KEY"
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # 🧠 DEV MODEL: Llama 3.3 70B
 llm = ChatGroq(
