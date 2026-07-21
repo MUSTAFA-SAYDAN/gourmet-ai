@@ -1,10 +1,10 @@
 import os
+import json
+import re
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from langchain_groq import ChatGroq
-from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -32,7 +32,7 @@ async def manifest():
 async def sw():
     return FileResponse("sw.js")
 
-# Groq ve Vektör Bağlantıları
+# Groq Bağlantısı
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 llm = ChatGroq(
@@ -41,20 +41,53 @@ llm = ChatGroq(
     groq_api_key=GROQ_API_KEY
 )
 
-# FAISS Vektör İndeksini Yükle
-embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-vectorstore = FAISS.load_local("faiss_mutfak_endeksi", embeddings, allow_dangerous_deserialization=True)
+# recipes.json Verisini Yükle
+with open("recipes.json", "r", encoding="utf-8") as f:
+    RECIPES = json.load(f)
+
+def find_best_recipe(query: str):
+    """Soru ile en alakalı tarifi recipes.json içinden bulur."""
+    query_words = set(re.findall(r'\w+', query.lower()))
+    best_match = None
+    best_score = -1
+
+    for item in RECIPES:
+        name = item.get("tarif_adi", item.get("name", ""))
+        ingredients = item.get("malzemeler", item.get("ingredients", []))
+        
+        text_to_search = f"{name} {' '.join(ingredients) if isinstance(ingredients, list) else ingredients}".lower()
+        
+        score = 0
+        for word in query_words:
+            if len(word) > 2 and word in text_to_search:
+                if word in name.lower():
+                    score += 3  # Başlıkta geçiyorsa ekstra puan
+                else:
+                    score += 1
+        
+        if score > best_score:
+            best_score = score
+            best_match = item
+    
+    if best_score <= 0 or not best_match:
+        return None
+        
+    name = best_match.get("tarif_adi", best_match.get("name", "Tarif"))
+    ingredients = best_match.get("malzemeler", best_match.get("ingredients", []))
+    steps = best_match.get("yapilis_adimlari", best_match.get("steps", []))
+    
+    ing_text = "\n".join([f"- {i}" for i in ingredients]) if isinstance(ingredients, list) else str(ingredients)
+    step_text = "\n".join([f"{idx+1}. {s}" for idx, s in enumerate(steps)]) if isinstance(steps, list) else str(steps)
+    
+    return f"TARİF ADI: {name}\n\nMALZEMELER:\n{ing_text}\n\nYAPILIŞI:\n{step_text}"
 
 @app.post("/ask/")
 async def ask_question(question: str):
     try:
-        # Sorulan soruyla ilgili SADECE en alakalı 1 tarifi çek
-        docs = vectorstore.similarity_search(question, k=1)
-        if not docs:
+        context = find_best_recipe(question)
+        if not context:
             return {"answer": "Üzgünüm, aradığınız tarif dökümanda bulunamadı."}
             
-        context = docs[0].page_content
-        
         prompt = ChatPromptTemplate.from_messages([
             ("system", (
                 "Sen sadece sana verilen BAĞLAM dökümanına göre cevap veren profesyonel bir mutfak robotusun.\n\n"
