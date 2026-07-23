@@ -259943,5 +259943,19 @@
       "content_hash": "1f9ad77a7274",
       "retry": true
     }
+  },
+  {
+    "tarif_adi": "Patates Kızartması",
+    "malzemeler": [
+      "4 adet büyük boy patates",
+      "2 su bardağı sıvı yağ",
+      "1 tatlı kaşığı tuz"
+    ],
+    "yapilis_adimlari": [
+      "Patatesleri soyun ve uzun ince şeritler halinde dilimleyin.",
+      "Nişastasının çıkması için soğuk suda 15 dakika bekletip iyice kurulayın.",
+      "Kızgın sıvı yağda altın sarısı olana kadar kızartın.",
+      "Tuzlayarak sıcak servis yapın."
+    ]
   }
 ]

@@ -159,19 +159,24 @@ class RecipeModel(BaseModel):
 @app.post("/add-recipe/")
 async def add_recipe(recipe: RecipeModel):
     try:
-        # Pydantic nesnesini standart Python sözlüğüne (dict) çeviriyoruz
-        new_recipe = recipe.model_dump() # Pydantic v2 standart kullanımı
+        new_recipe = recipe.model_dump()
         
-        # 1. Sunucu çalışırken RAM'deki listeye anında ekle
+        # 1. RAM'deki listeye ekle
         RECIPES.append(new_recipe)
         
-        # 2. Kalıcı kalması için recipes.json dosyasına yaz
+        # 2. recipes.json dosyasına yaz
         with open("recipes.json", "w", encoding="utf-8") as f:
             json.dump(RECIPES, f, ensure_ascii=False, indent=2)
             
+        # 3. YENİ EKLENEN KISIM: FAISS Vektör İndeksini Anında Güncelle
+        recipe_text = f"Tarif Adı: {recipe.tarif_adi}\nMalzemeler: {', '.join(recipe.malzemeler)}\nYapılış: {' '.join(recipe.yapilis_adimlari)}"
+        
+        vectorstore.add_texts(texts=[recipe_text], metadatas=[new_recipe])
+        vectorstore.save_local("faiss_mutfak_endeksi")
+            
         return {
             "status": "success", 
-            "message": f"'{recipe.tarif_adi}' başarıyla eklendi!",
+            "message": f"'{recipe.tarif_adi}' başarıyla eklendi ve vektör indeksine işlendi!",
             "toplam_tarif_sayisi": len(RECIPES)
         }
     except Exception as e:
