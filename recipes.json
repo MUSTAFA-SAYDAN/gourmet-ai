@@ -260001,5 +260001,28 @@
       "Önceden en yüksek derecede (230-240°C) ısıtılmış fırında, hamurun altı ve kenarları kızarana kadar pişirin.",
       "Dilimleyerek yanında bol yeşillik ve limonla sıcak servis yapın."
     ]
+  },
+  {
+    "tarif_adi": "Su Böreği",
+    "malzemeler": [
+      "6 adet yumurta",
+      "1/2 çay bardağı su",
+      "1 tatlı kaşığı tuz",
+      "4.5 - 5 su bardağı un",
+      "Arası için: 200 g eritilmiş tereyağı, 1/2 çay bardağı sıvı yağ",
+      "İç harcı için: 350 g böreklik beyaz peynir, 1/2 demet ince kıyılmış maydanoz",
+      "Haşlamak için: Bol sıcak su, 1 yemek kaşığı tuz, bol soğuk su"
+    ],
+    "yapilis_adimlari": [
+      "Yumurta, su ve tuzu bir kapta çırpın; unu azar azar ekleyerek orta sertlikte bir hamur yoğurun.",
+      "Hamuru 12 eşit bezeye ayırıp üzerini nemli bir bezle örterek 30 dakika dinlendirin.",
+      "Eritilmiş tereyağı ve sıvı yağı karıştırın. Peynir ile kıyılmış maydanozu harç haline getirin.",
+      "İlk bezeyi tepsi boyutunda açın, haşlamadan yağlanmış tepsinin tabanına serin ve üzerini yağlayın.",
+      "Kalan bezeleri açın. Geniş bir tencerede tuzlu su kaynatın, yanına da buzlu soğuk su dolu geniş bir kap koyun.",
+      "Açılan yufkaları tek tek kaynayan suda 30-40 saniye haşlayıp hemen soğuk suya alın. Süzdürerek tepsiye serin ve her katı yağlayın.",
+      "Yufkaların yarısına (6. kata) gelindiğinde peynirli iç harcı eşit şekilde yayın.",
+      "Kalan yufkaları da aynı şekilde haşlayıp, soğuk sudan geçirip aralarını yağlayarak dizin. En üstteki son yufkayı haşlamadan kapatın.",
+      "Kalan yağı en üste sürüp önceden ısıtılmış 190°C fırında altı ve üstü kızarana kadar 40-45 dakika pişirin."
+    ]
   }
 ]
