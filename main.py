@@ -65,19 +65,30 @@ def stringify_item(item):
     return str(item)
 
 def find_best_recipe(query: str):
-    """Soru ile en alakalı tarifi recipes.json içinden esnek biçimde bulur."""
+    """Soru ile en alakalı tarifi recipes.json içinden esnek ve öncelikli biçimde bulur."""
     if not RECIPES:
         return None
 
+    # Arama sorgusunu temizle (Örn: "patates kızartması tarifi" -> "patates kızartması")
+    clean_query = query.lower().replace("tarifi", "").replace("nedir", "").strip()
     query_words = set(re.findall(r'\w+', query.lower()))
+    
     best_match = None
-    best_score = -1
+    best_score = -999  # Negatif skorları da değerlendirebilmek için
 
     for item in RECIPES:
         if not isinstance(item, dict):
             continue
             
-        name = str(item.get("tarif_adi", item.get("name", "")))
+        name = str(item.get("tarif_adi", item.get("name", ""))).strip()
+        name_lower = name.lower()
+        
+        # 1. BİREBİR TAM EŞLEŞME (En Yüksek Öncelik)
+        # Eğer kullanıcının aradığı isimle tarif adı %100 aynıysa direkt bunu seç!
+        if clean_query == name_lower:
+            best_match = item
+            break
+            
         ingredients = item.get("malzemeler", item.get("ingredients", []))
         
         # Güvenli malzeme birleştirme
@@ -91,16 +102,22 @@ def find_best_recipe(query: str):
         score = 0
         for word in query_words:
             if len(word) > 2 and word in text_to_search:
-                if word in name.lower():
-                    score += 3
+                if word in name_lower:
+                    score += 5  # Başlıkta geçiyorsa yüksek puan
                 else:
-                    score += 1
+                    score += 1  # Malzemede geçiyorsa düşük puan
+
+        # 2. EKSTRA KELİME CEZASI (Yoğurtlu gibi gereksiz ekleri eler)
+        # Sorguda "yoğurtlu" yoksa ama yemek adında varsa puandan düş.
+        recipe_title_words = set(re.findall(r'\w+', name_lower))
+        extra_words = recipe_title_words - query_words
+        score -= len(extra_words) * 3  # Fazladan her kelime için 3 puan kır
         
         if score > best_score:
             best_score = score
             best_match = item
     
-    if best_score <= 0 or not best_match:
+    if not best_match:
         return None
         
     name = best_match.get("tarif_adi", best_match.get("name", "Tarif"))
@@ -124,6 +141,13 @@ def find_best_recipe(query: str):
 async def ask_question(question: str):
     try:
         context = find_best_recipe(question)
+        
+        # 🔍 FAISS VEYA ARAMA MOTORUNUN NE GETİRDİĞİNİ TERMINALDE GÖRELİM:
+        print("\n--------------------------------------------------")
+        print(f"❓ ARANAN SORU: {question}")
+        print(f"📄 BULUNAN BAĞLAM (CONTEXT):\n{context}")
+        print("--------------------------------------------------\n", flush=True)
+
         if not context:
             return {"answer": "Üzgünüm, aradığınız tarif dökümanda bulunamadı."}
             
@@ -135,8 +159,9 @@ async def ask_question(question: str):
                 "2. Ardından '### 👩‍🍳 Yapılışı' başlığı açarak dökümandaki tüm adımları eksiksiz ve sıra numarasıyla dök.\n"
                 "3. Sadece ve sadece dökümanda yazan bilgilere, malzemelere ve lezzet sırlarına sadık kal.\n"
                 "4. Dökümanda açıkça yer almayan hiçbir malzemeyi veya pişirme yöntemini kafandan ekleme.\n"
-                "5. Eğer sorulan soru dökümandaki tariflerde hiçbir şekilde geçmiyorsa, doğrudan 'Bu bilgi dökümanda yoktur.' de.\n"
-                "6. Tüm cevaplarını sadece ve sadece akıcı, temiz bir Türkçe ile ver."
+                "5. Eğer dökümanda hem klasik hem de farklı bir varyasyon (örneğin hem Patates Kızartması hem Yoğurtlu Patates Kızartması) varsa, kullanıcının TAM İSTEDİĞİ spesifik tarifi seç.\n"
+                "6. Eğer sorulan soru dökümandaki tariflerde hiçbir şekilde geçmiyorsa, doğrudan 'Bu bilgi dökümanda yoktur.' de.\n"
+                "7. Tüm cevaplarını sadece ve sadece akıcı, temiz bir Türkçe ile ver."
             )),
             ("human", "BAĞLAM DÖKÜMANI:\n{context}\n\nSORU:\n{question}\n\nCEVAP:")
         ])
