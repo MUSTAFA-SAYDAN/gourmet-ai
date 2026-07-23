@@ -7,6 +7,8 @@ from fastapi.responses import FileResponse
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from pydantic import BaseModel
+from typing import List
 
 app = FastAPI()
 
@@ -144,3 +146,32 @@ async def ask_question(question: str):
     except Exception as e:
         print(f"❌ TAM HATA DETAYI: {e}", flush=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# Dışarıdan gelecek tarifin veri kalıbı (Schema)
+class RecipeModel(BaseModel):
+    tarif_adi: str
+    malzemeler: List[str]
+    yapilis_adimlari: List[str]
+
+@app.post("/add-recipe/")
+async def add_recipe(recipe: RecipeModel):
+    try:
+        # Pydantic nesnesini standart Python sözlüğüne (dict) çeviriyoruz
+        new_recipe = recipe.model_dump() # Pydantic v2 standart kullanımı
+        
+        # 1. Sunucu çalışırken RAM'deki listeye anında ekle
+        RECIPES.append(new_recipe)
+        
+        # 2. Kalıcı kalması için recipes.json dosyasına yaz
+        with open("recipes.json", "w", encoding="utf-8") as f:
+            json.dump(RECIPES, f, ensure_ascii=False, indent=2)
+            
+        return {
+            "status": "success", 
+            "message": f"'{recipe.tarif_adi}' başarıyla eklendi!",
+            "toplam_tarif_sayisi": len(RECIPES)
+        }
+    except Exception as e:
+        print(f"❌ Tarif ekleme hatası: {e}", flush=True)
+        raise HTTPException(status_code=500, detail=f"Tarif eklenirken hata oluştu: {e}")
