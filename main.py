@@ -64,34 +64,43 @@ def stringify_item(item):
         return " ".join(str(v) for v in item.values())
     return str(item)
 
+
+def get_latest_recipes():
+    """recipes.json dosyasını anlık okur.
+    Böylece yeni tarif eklediğinde komut çalıştırmana veya sunucuyu restart etmene GEREK KALMAZ."""
+    try:
+        with open("recipes.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"⚠️ recipes.json okuma hatası: {e}")
+        return []
+
+    
 def find_best_recipe(query: str):
-    """Soru ile en alakalı tarifi recipes.json içinden esnek ve öncelikli biçimde bulur."""
-    if not RECIPES:
+    recipes = get_latest_recipes()  # <-- Anlık olarak güncel JSON'ı çeker!
+    if not recipes:
         return None
 
-    # Arama sorgusunu temizle (Örn: "patates kızartması tarifi" -> "patates kızartması")
     clean_query = query.lower().replace("tarifi", "").replace("nedir", "").strip()
     query_words = set(re.findall(r'\w+', query.lower()))
     
     best_match = None
-    best_score = -999  # Negatif skorları da değerlendirebilmek için
+    best_score = -999
 
-    for item in RECIPES:
+    for item in recipes:  # <-- RECIPES yerine recipes kullanıyoruz
         if not isinstance(item, dict):
             continue
             
         name = str(item.get("tarif_adi", item.get("name", ""))).strip()
         name_lower = name.lower()
         
-        # 1. BİREBİR TAM EŞLEŞME (En Yüksek Öncelik)
-        # Eğer kullanıcının aradığı isimle tarif adı %100 aynıysa direkt bunu seç!
+        # 1. BİREBİR TAM EŞLEŞME
         if clean_query == name_lower:
             best_match = item
             break
             
         ingredients = item.get("malzemeler", item.get("ingredients", []))
         
-        # Güvenli malzeme birleştirme
         if isinstance(ingredients, list):
             ing_str = " ".join([stringify_item(i) for i in ingredients])
         else:
@@ -103,15 +112,13 @@ def find_best_recipe(query: str):
         for word in query_words:
             if len(word) > 2 and word in text_to_search:
                 if word in name_lower:
-                    score += 5  # Başlıkta geçiyorsa yüksek puan
+                    score += 5
                 else:
-                    score += 1  # Malzemede geçiyorsa düşük puan
+                    score += 1
 
-        # 2. EKSTRA KELİME CEZASI (Yoğurtlu gibi gereksiz ekleri eler)
-        # Sorguda "yoğurtlu" yoksa ama yemek adında varsa puandan düş.
         recipe_title_words = set(re.findall(r'\w+', name_lower))
         extra_words = recipe_title_words - query_words
-        score -= len(extra_words) * 3  # Fazladan her kelime için 3 puan kır
+        score -= len(extra_words) * 3
         
         if score > best_score:
             best_score = score
@@ -124,7 +131,6 @@ def find_best_recipe(query: str):
     ingredients = best_match.get("malzemeler", best_match.get("ingredients", []))
     steps = best_match.get("yapilis_adimlari", best_match.get("steps", []))
     
-    # Güvenli Liste Çıktıları
     if isinstance(ingredients, list):
         ing_text = "\n".join([f"- {stringify_item(i)}" for i in ingredients])
     else:
