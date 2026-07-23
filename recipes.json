@@ -259957,5 +259957,26 @@
       "Kızgın sıvı yağda altın sarısı olana kadar kızartın.",
       "Tuzlayarak sıcak servis yapın."
     ]
+  },
+  {
+    "tarif_adi": "Kuzu Tandır",
+    "malzemeler": [
+      "1.5 kg kuzu kol veya kuzu incik",
+      "4-5 diş sarımsak",
+      "2 yemek kaşığı zeytinyağı",
+      "1 tatlı kaşığı tuz",
+      "1 çay kaşığı karabiber",
+      "1 tatlı kaşığı kekik",
+      "1 çay bardağı su"
+    ],
+    "yapilis_adimlari": [
+      "Kuzu etlerinin üzerine bıçakla derin çizikler atın ve sarımsakları bu çiziklerin içine yerleştirin.",
+      "Derin bir kapta zeytinyağı, tuz, karabiber ve kekiği karıştırıp etin her yerine sürerek marine edin.",
+      "Etleri yağlı kağıda sarıp, ardından alüminyum folyo ile hava almayacak şekilde iki kat kapatın.",
+      "Fırın tepsisine dizin ve tepsi tabanına 1 çay bardağı su ekleyin.",
+      "Önceden ısıtılmış 160 derece fırında yaklaşık 2.5 - 3 saat et tel tel ayrılana kadar ağır ağır pişirin.",
+      "Süre sonunda üzerindeki folyoyu açıp, fırın derecesini 200'e çıkararak üzerinin nar gibi kızarması için 10-15 dakika daha pişirin.",
+      "Sıcak olarak servis edin."
+    ]
   }
 ]
