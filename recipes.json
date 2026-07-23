@@ -259978,5 +259978,28 @@
       "Süre sonunda üzerindeki folyoyu açıp, fırın derecesini 200'e çıkararak üzerinin nar gibi kızarması için 10-15 dakika daha pişirin.",
       "Sıcak olarak servis edin."
     ]
+  },
+  {
+    "tarif_adi": "Etli Ekmek",
+    "malzemeler": [
+      "500 g orta yağlı dana kıyma",
+      "2 adet kuru soğan",
+      "2 adet domates",
+      "3 adet yeşil biber",
+      "1 yemek kaşığı biber salçası",
+      "1 tatlı kaşığı tuz",
+      "1 çay kaşığı karabiber",
+      "1 çay kaşığı pul biber",
+      "Hamuru için: 4 su bardağı un, 1.5 su bardağı ılık su, 1 tatlı kaşığı tuz, 1/2 paket yaş maya"
+    ],
+    "yapilis_adimlari": [
+      "Hamur malzemelerini derin bir kapta yoğurun ve yaklaşık 30 dakika mayalanmaya bırakın.",
+      "İç harcı için soğan, domates ve biberleri incecik kıyın veya robottan geçirin.",
+      "Kıyma, ince kıyılmış sebzeler, salça ve baharatları iyice karıştırarak harcı hazırlayın.",
+      "Mayalanan hamurdan bezeler alıp uzun ve ince oval biçimde açın.",
+      "Hazırladığınız etli harcı hamurun üzerine eşit şekilde yayın.",
+      "Önceden en yüksek derecede (230-240°C) ısıtılmış fırında, hamurun altı ve kenarları kızarana kadar pişirin.",
+      "Dilimleyerek yanında bol yeşillik ve limonla sıcak servis yapın."
+    ]
   }
 ]
