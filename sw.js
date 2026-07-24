@@ -1,14 +1,22 @@
-// GourmetAI Service Worker
-self.addEventListener('install', (event) => {
-    console.log('👷 Service Worker kuruluyor...');
-    self.skipWaiting();
+const CACHE_NAME = 'gourmet-ai-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(urlsToCache);
+    })
+  );
 });
 
-self.addEventListener('activate', (event) => {
-    console.log('🚀 Service Worker aktif!');
-});
-
-self.addEventListener('fetch', (event) => {
-    // Çevrimdışı/ağ istekleri için standart geçiş
-    event.respondWith(fetch(event.request));
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
 });

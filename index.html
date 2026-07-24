@@ -1,213 +1,343 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GourmetAI - Dijital Mutfak Asistanı</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <title>GourmetAI - Dijital Şef Asistanı</title>
+    
+    <!-- PWA ve Mobil Başlık Ayarları -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#e65100">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1830/1830839.png">
+
+    <!-- Modern Font ve Markdown Parse Kütüphanesi -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
-        body {
+        :root {
+            --primary: #e65100;
+            --primary-light: #fff3e0;
+            --bg-color: #f8f9fa;
+            --chat-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --user-bubble: #1e293b;
+            --bot-bubble: #fff8f1;
+            --border-color: #ffe0b2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        .chat-scroll::-webkit-scrollbar {
-            width: 5px;
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            height: 100dvh;
         }
 
-        .chat-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .chat-scroll::-webkit-scrollbar-thumb {
-            background: #e2e8f0;
-            border-radius: 10px;
-        }
-
-        .recipe-image {
+        .app-container {
             width: 100%;
-            max-height: 280px;
+            max-width: 600px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        header {
+            padding: 12px 16px;
+            background: #ffffff;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            font-size: 28px;
+        }
+
+        .brand-text h1 {
+            font-size: 18px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .brand-text p {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .upload-btn {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .chat-box {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: var(--bg-color);
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            max-width: 88%;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+        }
+
+        .bubble {
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            word-break: break-word;
+        }
+
+        .user .bubble {
+            background: var(--user-bubble);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot .bubble {
+            background: var(--bot-bubble);
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 4px;
+        }
+
+        .recipe-img {
+            width: 100%;
+            max-height: 250px;
             object-fit: cover;
             border-radius: 12px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 12px;
+            border: 1px solid rgba(0,0,0,0.08);
+            display: block;
+        }
+
+        .bubble h1, .bubble h2, .bubble h3 {
+            font-size: 15px;
+            margin: 10px 0 6px 0;
+            color: var(--primary);
+        }
+
+        .bubble ul, .bubble ol {
+            padding-left: 18px;
+            margin-bottom: 8px;
+        }
+
+        .bubble p {
+            margin-bottom: 8px;
+        }
+
+        .bubble p:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-area {
+            padding: 12px 16px;
+            background: #ffffff;
+            border-top: 1px solid #edf2f7;
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 24px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .input-area input:focus {
+            border-color: var(--primary);
+        }
+
+        .input-area button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 480px) {
+            .message {
+                max-width: 92%;
+            }
+            .recipe-img {
+                max-height: 200px;
+            }
         }
     </style>
-    <!-- PWA Manifest ve Mobil Uyumluluk Etiketleri -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ea580c">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3448/3448609.png">
 </head>
+<body>
 
-<body class="bg-[#faf9f6] text-[#2d2a26] min-h-screen flex flex-col justify-between">
-
-    <!-- 🍽️ HEADER -->
-    <header class="bg-white border-b border-orange-100 shadow-xs py-4 px-6 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <span class="text-3xl">👨‍🍳</span>
-            <div>
-                <h1 class="text-xl font-bold tracking-tight text-orange-600">GourmetAI</h1>
-                <p class="text-xs text-gray-400">70B Akıllı Mutfak Robotu</p>
+<div class="app-container">
+    <header>
+        <div class="brand">
+            <span class="brand-logo">👨‍🍳</span>
+            <div class="brand-text">
+                <h1>GourmetAI</h1>
+                <p>70B Akıllı Mutfak Robotu</p>
             </div>
         </div>
-
-        <!-- Dosya Yükleme Alanı -->
-        <div class="flex items-center gap-2">
-            <label
-                class="cursor-pointer bg-orange-50 hover:bg-orange-100 border border-orange-200 text-orange-700 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2">
-                📄 Tarif Listesi Yükle
-                <input type="file" id="menuFileInput" accept=".txt" class="hidden" onchange="uploadMenuFile()">
-            </label>
-            <span id="uploadStatus" class="text-xs font-medium text-gray-500"></span>
-        </div>
+        <button class="upload-btn">📄 Tarif Listesi</button>
     </header>
 
-    <!-- 💬 CHAT ARENASI -->
-    <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 flex flex-col justify-between overflow-hidden">
+    <div class="chat-box" id="chatBox">
+        <div class="message bot">
+            <div class="avatar">👨‍🍳</div>
+            <div class="bubble">
+                Merhaba! Ben dijital şef asistanınız. Yemeklerin yapılışları, tarifler ve mutfak sırları hakkında bana her şeyi sorabilirsiniz! 🍲
+            </div>
+        </div>
+    </div>
 
-        <!-- Hoş Geldiniz Kartı / Chat Geçmişi -->
-        <div id="chatWindow"
-            class="flex-1 bg-white border border-gray-100 rounded-2xl shadow-sm p-4 md:p-6 overflow-y-auto chat-scroll flex flex-col gap-4 mb-4">
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Tarif veya yemek adı yazın..." onkeydown="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()">➔</button>
+    </div>
+</div>
 
-            <!-- Karşılama Mesajı -->
-            <div class="flex gap-3 max-w-[85%] self-start">
-                <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-sm shadow-xs">👨‍🍳
-                </div>
-                <div
-                    class="bg-orange-50 text-gray-800 rounded-2xl rounded-tl-xs p-4 border border-orange-100/50 text-sm leading-relaxed shadow-xs">
-                    Merhaba! Ben restoranımızın dijital şef asistanıyım. Tarif listemizi yukarıdan yüklediyseniz,
-                    yemeklerin yapılışları, malzemeleri ve gizli lezzet sırları hakkında bana her şeyi sorabilirsiniz!
-                    🍲
+<script>
+    // Service Worker Kaydı (Mobil Uygulama Desteği)
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('✅ Service Worker Kayıtlı!'))
+                .catch(err => console.log('❌ SW Hatası:', err));
+        });
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById("userInput");
+        const message = input.value.trim();
+        if (!message) return;
+
+        appendMessage("user", message);
+        input.value = "";
+
+        const loadingId = appendMessage("bot", "<i>Şef düşünüyor, tarif hazırlanıyor... 👨‍🍳</i>");
+
+        try {
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: message })
+            });
+
+            const data = await response.json();
+            
+            document.getElementById(loadingId).remove();
+            appendBotResponse(data.reply, data.image_url);
+
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            appendMessage("bot", "⚠️ Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.");
+        }
+    }
+
+    function appendMessage(sender, text) {
+        const chatBox = document.getElementById("chatBox");
+        const msgId = "msg-" + Date.now();
+        const avatar = sender === "user" ? "👤" : "👨‍🍳";
+        
+        const html = `
+            <div class="message ${sender}" id="${msgId}">
+                <div class="avatar">${avatar}</div>
+                <div class="bubble">${text}</div>
+            </div>
+        `;
+        
+        chatBox.insertAdjacentHTML("beforeend", html);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        return msgId;
+    }
+
+    function appendBotResponse(replyText, imageUrl) {
+        const chatBox = document.getElementById("chatBox");
+        const msgId = "msg-" + Date.now();
+        
+        const formattedText = marked.parse(replyText);
+        
+        let imageHtml = "";
+        if (imageUrl) {
+            imageHtml = `<img src="${imageUrl}" class="recipe-img" alt="Yemek Görseli" onerror="this.style.display='none'">`;
+        }
+
+        const html = `
+            <div class="message bot" id="${msgId}">
+                <div class="avatar">👨‍🍳</div>
+                <div class="bubble">
+                    ${imageHtml}
+                    <div>${formattedText}</div>
                 </div>
             </div>
+        `;
+        
+        chatBox.insertAdjacentHTML("beforeend", html);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
 
-        </div>
-
-        <!-- İNPUT ALANI -->
-        <div class="bg-white border border-gray-100 rounded-2xl shadow-md p-2 flex items-center gap-2">
-            <input type="text" id="userInput" placeholder="Şefe bir soru sorun... (Örn: Hünkar beğendi nasıl yapılır?)"
-                class="flex-1 bg-transparent px-4 py-3 text-sm text-gray-800 focus:outline-hidden"
-                onkeydown="if(event.key === 'Enter') sendMessage()">
-
-            <button onclick="sendMessage()"
-                class="bg-orange-600 hover:bg-orange-700 text-white px-5 py-3 rounded-xl text-sm font-semibold tracking-wide transition shadow-sm cursor-pointer">
-                Sor
-            </button>
-        </div>
-
-    </main>
-
-    <!-- 🖥️ JAVASCRIPT MOTORU -->
-    <script>
-        const chatWindow = document.getElementById("chatWindow");
-        const userInput = document.getElementById("userInput");
-
-        function appendUserMessage(text) {
-            const msgHtml = `
-                <div class="flex gap-3 max-w-[85%] self-end flex-row-reverse">
-                    <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center shrink-0">👤</div>
-                    <div class="bg-gray-800 text-white rounded-2xl rounded-tr-xs p-4">
-                        ${text}
-                    </div>
-                </div>`;
-            chatWindow.insertAdjacentHTML('beforeend', msgHtml);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
-
-        function appendBotMessage(text, imageUrl = null) {
-            let imgHtml = "";
-            if (imageUrl) {
-                imgHtml = `<img src="${imageUrl}" class="recipe-image" alt="Tarif Görseli" loading="lazy" />`;
-            }
-
-            const formattedText = (text || "").replace(/\n/g, '<br>');
-
-            const msgHtml = `
-                <div class="flex gap-3 max-w-[85%] self-start">
-                    <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center shrink-0">👨‍🍳</div>
-                    <div class="bg-orange-50 text-gray-800 rounded-2xl rounded-tl-xs p-4 border border-orange-100/50">
-                        ${imgHtml}
-                        <div>${formattedText}</div>
-                    </div>
-                </div>`;
-
-            chatWindow.insertAdjacentHTML('beforeend', msgHtml);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
-
-        function appendLoadingMessage() {
-            const id = "loading_" + Date.now();
-            const msgHtml = `
-                <div id="${id}" class="flex gap-3 max-w-[85%] self-start items-center">
-                    <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center shrink-0">👨‍🍳</div>
-                    <div class="text-xs text-gray-400 font-medium flex items-center gap-1.5">
-                        <span class="animate-bounce">●</span>
-                        <span class="animate-bounce [animation-delay:0.2s]">●</span>
-                        <span class="animate-bounce [animation-delay:0.4s]">●</span>
-                    </div>
-                </div>`;
-            chatWindow.insertAdjacentHTML('beforeend', msgHtml);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-            return id;
-        }
-
-        async function sendMessage() {
-            const question = userInput.value.trim();
-            if (!question) return;
-
-            appendUserMessage(question);
-            userInput.value = "";
-
-            const loadingId = appendLoadingMessage();
-
-            try {
-                const response = await fetch(`/ask?question=${encodeURIComponent(question)}`, {
-                    method: 'POST'
-                });
-
-                const data = await response.json();
-
-                const loadingElem = document.getElementById(loadingId);
-                if (loadingElem) loadingElem.remove();
-
-                if (response.ok) {
-                    appendBotMessage(data.reply || data.answer, data.image_url);
-                } else {
-                    appendBotMessage("Üzgünüm, şu an mutfakta bir sorun oluştu.");
-                }
-            } catch (error) {
-                console.error("Sorgu hatası:", error);
-                const loadingElem = document.getElementById(loadingId);
-                if (loadingElem) loadingElem.remove();
-                appendBotMessage("Sunucuya bağlanılamadı. Lütfen sunucunun çalıştığından emin olun.");
-            }
-        }
-
-        // Enter tuşu ile gönderme desteği
-        if (userInput) {
-            userInput.addEventListener("keypress", function (e) {
-                if (e.key === "Enter") {
-                    sendMessage();
-                }
-            });
-        }
-
-        // PWA Service Worker Kaydı
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('PWA Kaydedildi!'))
-                    .catch(err => console.log('PWA Hatasi:', err));
-            });
-        }
-    </script>
 </body>
 </html>

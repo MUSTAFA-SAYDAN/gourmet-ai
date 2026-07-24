@@ -1,19 +1,20 @@
 {
-  "name": "GourmetAI - Dijital Mutfak Asistanı",
+  "name": "GourmetAI - Dijital Şef Asistanı",
   "short_name": "GourmetAI",
-  "start_url": "./index.html",
+  "description": "70B Akıllı Mutfak Robotu ve Yemek Tarifi Asistanı",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#faf9f6",
-  "theme_color": "#ea580c",
+  "background_color": "#ffffff",
+  "theme_color": "#e65100",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3448/3448609.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/1830/1830839.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3448/3448609.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/1830/1830839.png",
       "sizes": "512x512",
       "type": "image/png"
     }

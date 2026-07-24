@@ -6,11 +6,22 @@ import urllib.parse
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from groq import Groq
 
 # 1. Uygulama ve Ortam Değişkenleri
 app = FastAPI()
+
+# 🌐 CORS Ayarları
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 load_dotenv()
 
 groq_api_key = os.getenv("GROQ_API_KEY")
@@ -22,11 +33,19 @@ class ChatRequest(BaseModel):
     message: str
 
 
-# 3. Ana Sayfa (Frontend) Servis Etme
+# 3. Static / PWA Rotaları
 @app.get("/")
+@app.get("/index.html")
 async def read_root():
-    """Ana sayfayı (index.html) yükler"""
     return FileResponse("index.html")
+
+@app.get("/manifest.json")
+async def get_manifest():
+    return FileResponse("manifest.json")
+
+@app.get("/sw.js")
+async def get_sw():
+    return FileResponse("sw.js", media_type="application/javascript")
 
 
 # 4. Veritabanı Yardımcı Fonksiyonları
@@ -75,7 +94,7 @@ def search_recipe_in_db(query: str):
     return best_match
 
 
-# 5. Görsel İçin Yapay Zekaya İngilizce Prompt Ürettirme (Amelelik Yok!)
+# 5. Görsel İçin Yapay Zekaya İngilizce Prompt Ürettirme
 def generate_image_prompt_with_ai(dish_name: str) -> str:
     try:
         response = groq_client.chat.completions.create(
@@ -103,7 +122,6 @@ def generate_image_prompt_with_ai(dish_name: str) -> str:
 def ask_gourmet_ai(user_query: str):
     matched_recipe = search_recipe_in_db(user_query)
 
-    # Şef Personası ve Kuralları (Eksik olan değişken burasıydı)
     system_instruction = """
 Sen GourmetAI adında samimi, esprili, neşeli ve usta bir dijital şef asistansın.
 
@@ -128,7 +146,6 @@ KURALLAR:
     final_prompt = f"{context}KULLANICI MESAJI: {user_query}"
 
     try:
-        # A) Şefin Türkçe Yanıtını Üret
         completion = groq_client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
@@ -138,10 +155,8 @@ KURALLAR:
         )
         reply_text = completion.choices[0].message.content
 
-        # B) Görsel İçin İngilizce Tanımı Groq'a Ürettir
         ai_english_prompt = generate_image_prompt_with_ai(image_prompt_subject)
         
-        # C) Dinamik ve Kaliteli Görsel Linki Oluştur
         prompt_text = f"professional food photography of {ai_english_prompt}, mouth-watering, highly detailed, 8k"
         safe_subject = urllib.parse.quote(prompt_text)
         random_seed = random.randint(1, 99999)
