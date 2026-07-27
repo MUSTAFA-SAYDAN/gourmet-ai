@@ -260024,5 +260024,36 @@
       "Kalan yufkaları da aynı şekilde haşlayıp, soğuk sudan geçirip aralarını yağlayarak dizin. En üstteki son yufkayı haşlamadan kapatın.",
       "Kalan yağı en üste sürüp önceden ısıtılmış 190°C fırında altı ve üstü kızarana kadar 40-45 dakika pişirin."
     ]
+  },
+  {
+    "tarif_adi": "Ev Yapımı Limonata",
+    "hazirlama_suresi": "15 dakika",
+    "kategori": "İçecek",
+    "malzemeler": [
+      "10 adet limon",
+      "2 su bardağı toz şeker",
+      "5 su bardağı soğuk su",
+      "1 demet taze nane"
+    ],
+    "hazirlanisi": "Limonların kabuklarını rendeleyin ve toz şekerle aroması çıkana kadar iyice ovun. Limonların suyunu sıkıp şekerli kabuk karışımına ekleyin. Soğuk suyu ve taze nane yapraklarını ekleyip şeker tamamen eriyene kadar karıştırın. İnce bir süzgeçten geçirip bol buz ile servis edin."
+  },
+  {
+    "tarif_adi": "Geleneksel Etli Kuru Fasulye Tarifi",
+    "hazirlama_suresi": "20 dakika",
+    "kategori": "Yemek",
+    "malzemeler": [
+      "2 su bardağı kuru fasulye",
+      "200 gram kuşbaşı dana eti",
+      "1 adet büyük boy kuru soğan",
+      "1 yemek kaşığı domates salçası",
+      "1 tatlı kaşığı biber salçası",
+      "2 yemek kaşığı sıvı yağ",
+      "1 yemek kaşığı tereyağı",
+      "4 su bardağı sıcak su",
+      "1 çay kaşığı tuz",
+      "1 çay kaşığı karabiber",
+      "1 çay kaşığı toz kırmızı biber"
+    ],
+    "hazirlanisi": "Akşamdan ıslattığınız kuru fasulyeleri süzün, bir tencereye alıp üzerini geçecek kadar suyla 15-20 dakika kadar haşlayın ve suyunu süzün. Tencereye sıvı yağı ve kuşbaşı etleri alın. Etler suyunu salıp tekrar çekene kadar orta ateşte kavurun. Yemeklik doğradığınız soğanları ve tereyağını ekleyin. Soğanlar yumuşayıp pembeleşinceye kadar kavurmaya devam edin. Domates ve biber salçasını ekleyip kokusu çıkana kadar yaklaşık 2 dakika kavurun. Haşlayıp süzdüğünüz kuru fasulyeleri tencereye ilave edin ve tüm malzemeyi karıştırın. Üzerine sıcak suyu, tuzu, karabiberi ve kırmızı biberi ekleyin. Tencerenin kapağını kapatıp kısık ateşte fasulyeler ve etler lokum gibi yumuşayana kadar yaklaşık 40 dakika pişirin."
   }
 ]

@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GourmetAI - Dijital Şef Asistanı</title>
     
-    <!-- PWA ve Mobil Başlık Ayarları -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#e65100">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1830/1830839.png">
 
-    <!-- Modern Font ve Markdown Parse Kütüphanesi -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
@@ -26,214 +24,42 @@
             --border-color: #ffe0b2;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-dark); display: flex; justify-content: center; height: 100vh; height: 100dvh; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            display: flex;
-            justify-content: center;
-            height: 100vh;
-            height: 100dvh;
-        }
+        .app-container { width: 100%; max-width: 600px; height: 100%; display: flex; flex-direction: column; background: #ffffff; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
 
-        .app-container {
-            width: 100%;
-            max-width: 600px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            background: #ffffff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-        }
+        header { padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #edf2f7; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand-logo { font-size: 28px; }
+        .brand-text h1 { font-size: 18px; color: var(--primary); font-weight: 700; }
+        .brand-text p { font-size: 11px; color: #64748b; }
 
-        header {
-            padding: 12px 16px;
-            background: #ffffff;
-            border-bottom: 1px solid #edf2f7;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
+        .upload-btn { background: var(--primary-light); color: var(--primary); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .chat-box { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: var(--bg-color); }
+        .message { display: flex; gap: 10px; max-width: 88%; }
+        .message.user { align-self: flex-end; flex-direction: row-reverse; }
+        .message.bot { align-self: flex-start; }
 
-        .brand-logo {
-            font-size: 28px;
-        }
+        .avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; background: #fff; border: 1px solid #e2e8f0; }
+        .bubble { padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.6; word-break: break-word; }
 
-        .brand-text h1 {
-            font-size: 18px;
-            color: var(--primary);
-            font-weight: 700;
-        }
+        .user .bubble { background: var(--user-bubble); color: #ffffff; border-bottom-right-radius: 4px; }
+        .bot .bubble { background: var(--bot-bubble); color: var(--text-dark); border: 1px solid var(--border-color); border-bottom-left-radius: 4px; }
 
-        .brand-text p {
-            font-size: 11px;
-            color: #64748b;
-        }
+        .recipe-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(0,0,0,0.08); display: block; }
 
-        .upload-btn {
-            background: var(--primary-light);
-            color: var(--primary);
-            border: 1px solid var(--border-color);
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
+        .bubble h1, .bubble h2, .bubble h3 { font-size: 15px; margin: 10px 0 6px 0; color: var(--primary); }
+        .bubble ul, .bubble ol { padding-left: 18px; margin-bottom: 8px; }
+        .bubble p { margin-bottom: 8px; }
 
-        .chat-box {
-            flex: 1;
-            padding: 16px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            background: var(--bg-color);
-        }
+        .input-area { padding: 12px 16px; background: #ffffff; border-top: 1px solid #edf2f7; display: flex; gap: 8px; align-items: center; }
+        .input-area input { flex: 1; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 24px; outline: none; font-size: 14px; }
+        .input-area button { background: var(--primary); color: white; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
 
-        .message {
-            display: flex;
-            gap: 10px;
-            max-width: 88%;
-        }
-
-        .message.user {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-
-        .message.bot {
-            align-self: flex-start;
-        }
-
-        .avatar {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-            background: #fff;
-            border: 1px solid #e2e8f0;
-        }
-
-        .bubble {
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            line-height: 1.6;
-            word-break: break-word;
-        }
-
-        .user .bubble {
-            background: var(--user-bubble);
-            color: #ffffff;
-            border-bottom-right-radius: 4px;
-        }
-
-        .bot .bubble {
-            background: var(--bot-bubble);
-            color: var(--text-dark);
-            border: 1px solid var(--border-color);
-            border-bottom-left-radius: 4px;
-        }
-
-        .recipe-img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(0,0,0,0.08);
-            display: block;
-        }
-
-        .bubble h1, .bubble h2, .bubble h3 {
-            font-size: 15px;
-            margin: 10px 0 6px 0;
-            color: var(--primary);
-        }
-
-        .bubble ul, .bubble ol {
-            padding-left: 18px;
-            margin-bottom: 8px;
-        }
-
-        .bubble p {
-            margin-bottom: 8px;
-        }
-
-        .bubble p:last-child {
-            margin-bottom: 0;
-        }
-
-        .input-area {
-            padding: 12px 16px;
-            background: #ffffff;
-            border-top: 1px solid #edf2f7;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .input-area input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 1px solid #cbd5e1;
-            border-radius: 24px;
-            outline: none;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .input-area input:focus {
-            border-color: var(--primary);
-        }
-
-        .input-area button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-            transition: all 0.2s;
-        }
-
-        /* 🎙️ Mikrofon Butonu Stilleri */
-        .mic-btn {
-            background: var(--primary-light) !important;
-            color: var(--primary) !important;
-            border: 1px solid var(--border-color) !important;
-        }
-
-        .mic-btn.recording {
-            background: #ef4444 !important;
-            color: white !important;
-            animation: pulse 1.2s infinite;
-        }
+        .mic-btn { background: var(--primary-light) !important; color: var(--primary) !important; border: 1px solid var(--border-color) !important; }
+        .mic-btn.recording { background: #ef4444 !important; color: white !important; animation: pulse 1.2s infinite; }
 
         @keyframes pulse {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
@@ -241,14 +67,13 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
-        @media (max-width: 480px) {
-            .message {
-                max-width: 92%;
-            }
-            .recipe-img {
-                max-height: 200px;
-            }
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 16px; }
+        .modal-card { background: white; width: 100%; max-width: 500px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 12px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { font-size: 16px; color: var(--primary); }
+        .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #64748b; }
+        .modal-card textarea { width: 100%; height: 140px; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px; font-size: 13px; outline: none; resize: none; }
+        .modal-submit { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -262,76 +87,114 @@
                 <p>70B Akıllı Mutfak Robotu</p>
             </div>
         </div>
-        <button class="upload-btn">📄 Tarif Listesi</button>
+        <button class="upload-btn" onclick="openModal()">📝 Tarif Ekle</button>
     </header>
 
     <div class="chat-box" id="chatBox">
         <div class="message bot">
             <div class="avatar">👨‍🍳</div>
             <div class="bubble">
-                Merhaba! Ben dijital şef asistanınız. Dilerseniz mikrofon butonuna 🎙️ basarak sesli konuşabilir ya da mesaj yazabilirsiniz! 🍲
+                Merhaba! Ben dijital şef asistanınız. İstediğiniz tarifi sorabilir veya sağ üstteki <b>"📝 Tarif Ekle"</b> butonundan elinizdeki düz metin tarifleri sisteme öğretebilirsiniz! 🍲
             </div>
         </div>
     </div>
 
     <div class="input-area">
         <button id="micBtn" class="mic-btn" onclick="toggleSpeech()" title="Sesli Konuş">🎙️</button>
-        <input type="text" id="userInput" placeholder="Tarif yazın veya sesli söyleyin..." onkeydown="if(event.key==='Enter') sendMessage()">
+        <input type="text" id="user-input" placeholder="Tarif yazın veya sesli söyleyin..." onkeydown="if(event.key==='Enter') sendMessage()">
         <button onclick="sendMessage()" title="Gönder">➔</button>
     </div>
 </div>
 
+<!-- 🪟 Düz Metin Tarif Ekleme Modalı -->
+<div class="modal-overlay" id="recipeModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h2>✨ Düz Metin Tarif Ekle</h2>
+            <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+        <p style="font-size: 12px; color: #64748b;">Kopyaladığınız tarifi buraya yapıştırın. Yapay Zeka bunu otomatik anlayıp veritabanına JSON olarak kaydedecektir.</p>
+        <textarea id="rawRecipeText" placeholder="Örn: Menemen Tarifi: 2 yumurta, 2 domates, 1 biber. Biber ve domatesi kavur, yumurtaları kır ve karıştır."></textarea>
+        <button class="modal-submit" onclick="submitRawRecipe()">✨ AI ile Yapılandır ve Kaydet</button>
+    </div>
+</div>
+
 <script>
-    // Service Worker Kaydı (PWA Desteği)
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-                .then(reg => console.log('✅ Service Worker Kayıtlı!'))
-                .catch(err => console.log('❌ SW Hatası:', err));
+            navigator.serviceWorker.register('/sw.js');
         });
     }
 
-    // 🎙️ Web Speech API (Sürekli / Otomatik Dinleme Mantığı)
+    // Modal Kontrolleri
+    function openModal() { document.getElementById("recipeModal").style.display = "flex"; }
+    function closeModal() { document.getElementById("recipeModal").style.display = "none"; }
+
+    // 🤖 Düz Metni AI ile JSON'a Çevirip Kaydetme
+    async function submitRawRecipe() {
+        const textInput = document.getElementById("rawRecipeText").value.trim();
+        if (!textInput) {
+            alert("Lütfen önce bir tarif metni yazın veya yapıştırın!");
+            return;
+        }
+
+        closeModal();
+        document.getElementById("rawRecipeText").value = "";
+
+        const loadingId = appendMessage("bot", "<i>🤖 Yapay Zeka tarifi okuyor ve JSON formatına dönüştürüyor... 👨‍🍳</i>");
+
+        try {
+            const response = await fetch("/add-recipe-text", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ recipe_text: textInput })
+            });
+
+            const data = await response.json();
+            document.getElementById(loadingId).remove();
+
+            if (data.status === "success") {
+                appendBotResponse(`✅ **Tebrikler!** ${data.message} Artık bu tarif veritabanımızda saklanıyor.`, null);
+            } else {
+                appendMessage("bot", `⚠️ ${data.message}`);
+            }
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            appendMessage("bot", "⚠️ Sunucu ile bağlantı kurulamadı.");
+        }
+    }
+
+    // 🎙️ Web Speech API (Eller Serbest Sesli Komut)
     let recognition = null;
     let isListening = false;
-    let autoContinuousMode = false; // Elleri serbest mod takibi
 
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         recognition = new SpeechRecognition();
         recognition.lang = 'tr-TR';
-        recognition.continuous = false; // Parça parça algılayıp göndermek için false kalmalı
+        recognition.continuous = false;
         recognition.interimResults = false;
 
         recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
-            document.getElementById("userInput").value = transcript;
+            document.getElementById("user-input").value = transcript;
             stopListeningUI();
-            sendMessage(); // Mesajı gönder
+            sendMessage();
         };
 
-        recognition.onerror = (event) => {
-            console.error("Ses Tanıma Hatası:", event.error);
-            stopListeningUI();
-        };
-
-        recognition.onend = () => {
-            stopListeningUI();
-        };
+        recognition.onerror = () => { stopListeningUI(); };
+        recognition.onend = () => { stopListeningUI(); };
     }
 
     function toggleSpeech() {
         if (!recognition) {
-            alert("⚠️ Tarayıcınız ses tanıma özelliğini desteklemiyor. Lütfen Chrome, Edge veya Safari kullanın.");
+            alert("⚠️ Tarayıcınız ses tanıma özelliğini desteklemiyor.");
             return;
         }
-
         if (isListening) {
-            autoContinuousMode = false; // Manuel kapatıldığında döngüyü kır
             recognition.stop();
             stopListeningUI();
         } else {
-            autoContinuousMode = true; // Dinlemeyi başlat ve eller serbest modu aç
             startListening();
         }
     }
@@ -343,10 +206,8 @@
             const micBtn = document.getElementById("micBtn");
             micBtn.classList.add("recording");
             micBtn.innerHTML = "🔴";
-            document.getElementById("userInput").placeholder = "Sizi dinliyorum, konuşun...";
-        } catch (err) {
-            console.log("Zaten dinleniyor veya başlatılamadı:", err);
-        }
+            document.getElementById("user-input").placeholder = "Sizi dinliyorum, konuşun...";
+        } catch (err) {}
     }
 
     function stopListeningUI() {
@@ -354,92 +215,99 @@
         const micBtn = document.getElementById("micBtn");
         micBtn.classList.remove("recording");
         micBtn.innerHTML = "🎙️";
-        document.getElementById("userInput").placeholder = "Tarif yazın veya sesli söyleyin...";
+        document.getElementById("user-input").placeholder = "Tarif yazın veya sesli söyleyin...";
     }
 
-    // Sohbet Geçmişi Dizisi (Chat History)
-    let chatHistory = [];
+   // Sayfanın en üstünde chatHistory tanımlı olmalı:
+let chatHistory = [];
 
-    async function sendMessage() {
-        const input = document.getElementById("userInput");
-        const message = input.value.trim();
-        if (!message) return;
+async function sendMessage() {
+    const inputField = document.getElementById("user-input");
+    if (!inputField) return;
 
-        appendMessage("user", message);
-        input.value = "";
+    const message = inputField.value.trim();
+    if (!message) return;
 
-        const loadingId = appendMessage("bot", "<i>Şef düşünüyor... 👨‍🍳</i>");
+    appendMessage("user", message);
+    inputField.value = "";
 
-        try {
-            const response = await fetch("/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    message: message,
-                    history: chatHistory // Geçmişi backend'e yolla
-                })
-            });
+    showThinkingIndicator();
 
-            const data = await response.json();
-            
-            document.getElementById(loadingId).remove();
-            appendBotResponse(data.reply, data.image_url);
+    try {
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: message, history: chatHistory })
+        });
 
-            // Geçmişe ekle
-            chatHistory.push({ role: "user", content: message });
-            chatHistory.push({ role: "assistant", content: data.reply });
+        const data = await response.json();
 
-            if (autoContinuousMode) {
-                setTimeout(() => { startListening(); }, 1000);
-            }
+        removeThinkingIndicator();
+        appendBotResponse(data.reply, data.image_url);
 
-        } catch (error) {
-            document.getElementById(loadingId).remove();
-            appendMessage("bot", "⚠️ Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.");
-        }
+        // KESİNLİKLE BU ŞEKİLDE 'assistant' OLARAK EKLENMELİ:
+        chatHistory.push({ role: "user", content: message });
+        chatHistory.push({ role: "assistant", content: data.reply });
+
+    } catch (error) {
+        console.error("Hata:", error);
+        removeThinkingIndicator();
+        appendMessage("bot", "⚠️ Sunucu ile bağlantı kurulamadı.");
     }
+}
 
+// ⏳ Yükleme Baloncuğu Kontrolleri
+function showThinkingIndicator() {
+    removeThinkingIndicator(); // Varsa eskisini temizle
+    const chatBox = document.getElementById("chatBox");
+    const html = `
+        <div class="message bot" id="thinking-indicator">
+            <div class="avatar">👨‍🍳</div>
+            <div class="bubble"><i>Şef düşünüyor... 👨‍🍳</i></div>
+        </div>`;
+    chatBox.insertAdjacentHTML("beforeend", html);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function removeThinkingIndicator() {
+    const indicator = document.getElementById("thinking-indicator");
+    if (indicator) {
+        indicator.remove();
+    }
+}
+
+    // Mesaj Eklemeyi Sağlayan Yardımcı Fonksiyonlar
     function appendMessage(sender, text) {
         const chatBox = document.getElementById("chatBox");
         const msgId = "msg-" + Date.now();
         const avatar = sender === "user" ? "👤" : "👨‍🍳";
-        
-        const html = `
-            <div class="message ${sender}" id="${msgId}">
-                <div class="avatar">${avatar}</div>
-                <div class="bubble">${text}</div>
-            </div>
-        `;
-        
+        const html = `<div class="message ${sender}" id="${msgId}"><div class="avatar">${avatar}</div><div class="bubble">${text}</div></div>`;
         chatBox.insertAdjacentHTML("beforeend", html);
         chatBox.scrollTop = chatBox.scrollHeight;
         return msgId;
     }
 
-    function appendBotResponse(replyText, imageUrl) {
-        const chatBox = document.getElementById("chatBox");
-        const msgId = "msg-" + Date.now();
-        
-        const formattedText = marked.parse(replyText);
-        
-        let imageHtml = "";
-        if (imageUrl) {
-            imageHtml = `<img src="${imageUrl}" class="recipe-img" alt="Yemek Görseli" onerror="this.style.display='none'">`;
-        }
+    function appendBotResponse(reply, imageUrl) {
+    const chatBox = document.getElementById("chatBox");
 
-        const html = `
-            <div class="message bot" id="${msgId}">
-                <div class="avatar">👨‍🍳</div>
-                <div class="bubble">
-                    ${imageHtml}
-                    <div>${formattedText}</div>
-                </div>
-            </div>
-        `;
-        
-        chatBox.insertAdjacentHTML("beforeend", html);
-        chatBox.scrollTop = chatBox.scrollHeight;
+    // Resim varsa img etiketi oluştur
+    let imgHtml = "";
+    if (imageUrl && imageUrl.trim() !== "") {
+        imgHtml = `<img src="${imageUrl}" alt="Yemek Görseli" class="recipe-image" style="width:100%; max-height:300px; object-fit:cover; border-radius:12px; margin-bottom:10px;" />`;
     }
+
+    const html = `
+        <div class="message bot">
+            <div class="avatar">👨‍🍳</div>
+            <div class="bubble">
+                ${imgHtml}
+                <div>${marked.parse(reply)}</div>
+            </div>
+        </div>`;
+
+    chatBox.insertAdjacentHTML("beforeend", html);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
 </script>
 
 </body>
