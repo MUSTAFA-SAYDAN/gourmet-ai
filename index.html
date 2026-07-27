@@ -222,6 +222,9 @@
 let chatHistory = [];
 
 async function sendMessage() {
+    // 🔓 TARAYICI SES KİLİDİNİ ANINDA AÇ (Fetch öncesi tıklama anında)
+    unlockAudio();
+
     const inputField = document.getElementById("user-input");
     if (!inputField) return;
 
@@ -245,7 +248,9 @@ async function sendMessage() {
         removeThinkingIndicator();
         appendBotResponse(data.reply, data.image_url);
 
-        // KESİNLİKLE BU ŞEKİLDE 'assistant' OLARAK EKLENMELİ:
+        // 🔊 CEVABI SESLİ OKU
+        speakText(data.reply);
+
         chatHistory.push({ role: "user", content: message });
         chatHistory.push({ role: "assistant", content: data.reply });
 
@@ -307,6 +312,63 @@ function removeThinkingIndicator() {
 
     chatBox.insertAdjacentHTML("beforeend", html);
     chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// 🔊 SES MOTORU VE KİLİT AÇMA MANTIĞI
+
+let turkishVoice = null;
+
+// 1. Türkçe ses paketini yükleme (Chrome için async kontrol)
+function loadVoices() {
+    if (!('speechSynthesis' in window)) return;
+    const voices = window.speechSynthesis.getVoices();
+    turkishVoice = voices.find(v => v.lang.includes('tr') || v.lang.includes('TR')) || null;
+}
+
+if ('speechSynthesis' in window) {
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+// 2. Tarayıcının Ses Engeli Kilidini Açma (Tıklama anında çağrılır)
+function unlockAudio() {
+    if (!('speechSynthesis' in window)) return;
+    // Tarayıcıya "kullanıcı ses izni verdi" dedirtmek için sessiz bir tetikleme yapıyoruz
+    if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+    }
+}
+
+// 3. Metin Temizleme
+function cleanTextForSpeech(text) {
+    return text
+        .replace(/<[^>]*>/g, '')                     // HTML etiketleri
+        .replace(/[\*\_~`#]/g, '')                   // Markdown (*) (#)
+        .replace(/^[0-9]+\.\s+/gm, '')               // Liste numaraları
+        .replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '') // Emojiler
+        .trim();
+}
+
+// 4. Şefin Sesli Okuma Fonksiyonu
+function speakText(text) {
+    if (!('speechSynthesis' in window)) return;
+
+    const cleanText = cleanTextForSpeech(text);
+    if (!cleanText) return;
+
+    // Önceki seslendirmeyi iptal et
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'tr-TR';
+    utterance.rate = 1.0;  // Okuma hızı
+    utterance.pitch = 1.0; // Ses tonu
+
+    if (turkishVoice) {
+        utterance.voice = turkishVoice;
+    }
+
+    window.speechSynthesis.speak(utterance);
 }
 </script>
 
