@@ -309,12 +309,209 @@
             font-weight: 600;
             cursor: pointer;
         }
+
+        /* --- FAVORİLER MODAL & KART TASARIMI --- */
+        .fav-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(6px);
+            /* Arka planı buğulaştırır */
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .fav-modal-content {
+            background: #ffffff;
+            width: 100%;
+            max-width: 580px;
+            max-height: 85vh;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .fav-modal-header {
+            padding: 20px 24px;
+            background: linear-gradient(135deg, #ff7675, #d63031);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fav-modal-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-fav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .close-fav-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .fav-modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            background: #f8fafc;
+        }
+
+        /* Şık Yemek Kartı */
+        .fav-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .fav-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+        }
+
+        .fav-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .fav-card-title {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fav-card-date {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            background: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .fav-card-content {
+            font-size: 0.9rem;
+            color: #334155;
+            line-height: 1.6;
+            max-height: 180px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        .fav-card-actions {
+            margin-top: 14px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .delete-fav-btn {
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .delete-fav-btn:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Boş Durum Tasarımı */
+        .fav-empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .fav-empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="app-container">
+        <!-- Üst Bar / Header Yanına Favoriler Butonu -->
+        <div class="header-actions"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
+            <h2>GourmetAI 🍳</h2>
+            <button id="open-fav-btn" onclick="toggleFavoritesModal()"
+                style="background: #ff4757; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold;">
+                ❤️ Favorilerim (<span id="fav-count">0</span>)
+            </button>
+        </div>
+
+        <!-- ŞIK FAVORİLER PENCERESİ (MODAL) -->
+        <div id="favorites-modal" class="fav-modal-backdrop">
+            <div class="fav-modal-content">
+                <div class="fav-modal-header">
+                    <h3>❤️ Kaydedilen Tariflerim</h3>
+                    <button class="close-fav-btn" onclick="toggleFavoritesModal()">✕</button>
+                </div>
+
+                <div class="fav-modal-body" id="favorites-list">
+                    <!-- JavaScript burayı kartlarla dolduracak -->
+                </div>
+            </div>
+        </div>
+
         <header>
             <div class="brand">
                 <span class="brand-logo">👨‍🍳</span>
@@ -546,22 +743,34 @@
                 imgHtml = `<img src="${imageUrl}" alt="Yemek Görseli" class="recipe-image" style="width:100%; max-height:300px; object-fit:cover; border-radius:12px; margin-bottom:10px;" />`;
             }
 
+            // Butonu yakalamak için benzersiz bir ID üretiyoruz
+            const msgId = "fav-btn-" + Date.now();
+
             const html = `
-        <div class="message bot">
-            <div class="avatar">👨‍🍳</div>
-            <div class="bubble">
-                ${imgHtml}
-                <div>${marked.parse(reply)}</div>
-            </div>
-        </div>`;
+<div class="message bot">
+    <div class="avatar">👨‍🍳</div>
+    <div class="bubble">
+        ${imgHtml}
+        <div>${marked.parse(reply)}</div>
+        <!-- FAVORİ BUTONU -->
+        <button id="${msgId}" style="margin-top: 10px; background: #ffeaa7; border: 1px solid #fdcb6e; padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: bold; color: #d63031; display: inline-flex; align-items: center; gap: 4px;">
+            ❤️ Favorilere Ekle
+        </button>
+    </div>
+</div>`;
 
             chatBox.insertAdjacentHTML("beforeend", html);
+
+            // Buton ekrana basıldıktan sonra tıklama olayını güvenle bağlıyoruz
+            const favBtn = document.getElementById(msgId);
+            if (favBtn) {
+                favBtn.addEventListener("click", function () {
+                    saveToFavorites("Aşçı Tarifi", reply);
+                });
+            }
+
             chatBox.scrollTop = chatBox.scrollHeight;
         }
-
-        // 🔊 SES MOTORU VE KİLİT AÇMA MANTIĞI
-
-        let turkishVoice = null;
 
         // 1. Türkçe ses paketini yükleme (Chrome için async kontrol)
         function loadVoices() {
@@ -670,7 +879,113 @@
             }
         }
 
+        // Sayfa yüklendiğinde favorileri hafızadan yükle
+        document.addEventListener("DOMContentLoaded", () => {
+            renderFavorites();
+        });
+
+        // Favoriler Modalı Aç/Kapa
+        function toggleFavoritesModal() {
+            const modal = document.getElementById("favorites-modal");
+            if (modal.style.display === "none" || modal.style.display === "") {
+                modal.style.display = "flex";
+                renderFavorites();
+            } else {
+                modal.style.display = "none";
+            }
+        }
+
+        function saveToFavorites(title, content) {
+            let favorites = JSON.parse(localStorage.getItem("gourmet_favorites") || "[]");
+
+            // 1. DÜZELTME: Başlığa göre değil, İÇERİĞE göre kontrol et!
+            const isAlreadySaved = favorites.some(fav => fav.content.trim() === content.trim());
+            if (isAlreadySaved) {
+                alert("Bu tarif zaten favorilerinizde ekli!");
+                return;
+            }
+
+            // 2. BONUS: Tarif metninin ilk satırını otomatik BAŞLIK yap
+            let recipeTitle = title;
+            if (content) {
+                // İlk satırı al, # veya * gibi sembolleri temizle
+                const firstLine = content.trim().split("\n")[0].replace(/[#*]/g, "").trim();
+                if (firstLine.length > 0 && firstLine.length < 60) {
+                    recipeTitle = firstLine;
+                }
+            }
+
+            const newFav = {
+                id: Date.now(),
+                title: recipeTitle,
+                content: content,
+                date: new Date().toLocaleDateString("tr-TR")
+            };
+
+            favorites.push(newFav);
+            localStorage.setItem("gourmet_favorites", JSON.stringify(favorites));
+            alert("Tarif favorilere eklendi! ❤️");
+
+            // Favori listesini ve sayacı güncelle
+            renderFavorites();
+        }
+        
+        // 2. Favorilerden Sil
+        function removeFavorite(id) {
+            let favorites = JSON.parse(localStorage.getItem("gourmet_favorites") || "[]");
+            favorites = favorites.filter(fav => fav.id !== id);
+            localStorage.setItem("gourmet_favorites", JSON.stringify(favorites));
+            renderFavorites();
+        }
+
+        function renderFavorites() {
+            const favorites = JSON.parse(localStorage.getItem("gourmet_favorites") || "[]");
+            const favListContainer = document.getElementById("favorites-list");
+            const favCountSpan = document.getElementById("fav-count");
+
+            if (favCountSpan) favCountSpan.innerText = favorites.length;
+            if (!favListContainer) return;
+
+            // Eğer favori yoksa şık bir boş durum göster
+            if (favorites.length === 0) {
+                favListContainer.innerHTML = `
+            <div class="fav-empty-state">
+                <div class="fav-empty-icon">📖</div>
+                <h4 style="margin: 0 0 8px 0; color: #334155;">Henüz Tarif Kaydetmediniz</h4>
+                <p style="margin: 0; font-size: 0.85rem;">Beğendiğiniz tariflerin altındaki <b>"❤️ Favorilere Ekle"</b> butonuna basarak buraya kaydedebilirsiniz.</p>
+            </div>
+        `;
+                return;
+            }
+
+            // Favori kartlarını oluştur
+            favListContainer.innerHTML = favorites.map(fav => {
+                // Eğer marked.js kütüphanesi varsa tarif içeriğini biçimlendir, yoksa düz metin bas
+                const formattedContent = (typeof marked !== 'undefined') ? marked.parse(fav.content) : fav.content;
+
+                return `
+            <div class="fav-card">
+                <div class="fav-card-header">
+                    <div class="fav-card-title">
+                        <span>🍳</span> ${fav.title || 'Aşçı Tarifi'}
+                    </div>
+                    <span class="fav-card-date">${fav.date}</span>
+                </div>
+                <div class="fav-card-content">
+                    ${formattedContent}
+                </div>
+                <div class="fav-card-actions">
+                    <button class="delete-fav-btn" onclick="removeFavorite(${fav.id})">
+                        🗑️ Tarifi Sil
+                    </button>
+                </div>
+            </div>
+        `;
+            }).join("");
+        }
+
     </script>
 
 </body>
+
 </html>
