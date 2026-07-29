@@ -10,8 +10,8 @@
     <meta name="theme-color" content="#e65100">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1830/1830839.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
@@ -36,73 +36,132 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-dark);
-            display: flex;
-            justify-content: center;
-            height: 100vh;
-            height: 100dvh;
+            min-height: 100vh;
         }
 
-        .app-container {
-            width: 100%;
-            max-width: 600px;
-            height: 100%;
+        /* Ana Düzen Kapsayıcısı */
+        .app-layout {
+            display: flex;
+            max-width: 1280px;
+            height: 92vh;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid #f1ece1;
+        }
+
+        /* SOL PANEL: Şefin Kileri */
+        .sidebar {
+            width: 320px;
+            background: #faf7f2;
+            border-right: 1px solid #efe8dc;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            background: #ffffff;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            gap: 24px;
+            overflow-y: auto;
         }
 
-        header {
-            padding: 12px 16px;
-            background: #ffffff;
-            border-bottom: 1px solid #edf2f7;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand-logo {
-            font-size: 28px;
-        }
-
-        .brand-text h1 {
-            font-size: 18px;
-            color: var(--primary);
+        .sidebar-title {
+            font-size: 1.1rem;
             font-weight: 700;
+            color: #2d3436;
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .brand-text p {
-            font-size: 11px;
-            color: #64748b;
+        .daily-recipe-card {
+            background: linear-gradient(135deg, #ff7675, #e17055);
+            color: white;
+            padding: 18px;
+            border-radius: 18px;
+            box-shadow: 0 10px 20px rgba(225, 112, 85, 0.25);
         }
 
-        .upload-btn {
-            background: var(--primary-light);
-            color: var(--primary);
-            border: 1px solid var(--border-color);
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 12px;
+        .daily-recipe-card .badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
             font-weight: 600;
+        }
+
+        .daily-recipe-card h4 {
+            margin: 10px 0 6px 0;
+            font-size: 1.05rem;
+        }
+
+        .daily-recipe-card p {
+            margin: 0 0 12px 0;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .daily-btn {
+            background: white;
+            color: #e17055;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.8rem;
             cursor: pointer;
-            white-space: nowrap;
+            transition: transform 0.2s;
+        }
+
+        .daily-btn:hover {
+            transform: scale(1.03);
+        }
+
+        .category-chips {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chip-btn {
+            background: #ffffff;
+            border: 1px solid #e2dcd0;
+            padding: 10px 14px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #4a4a4a;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chip-btn:hover {
+            background: #ffeaa7;
+            border-color: #fdcb6e;
+            color: #d63031;
+            transform: translateX(4px);
+        }
+
+        /* SAĞ PANEL: Sohbet Alanı */
+        .chat-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .chat-box {
             flex: 1;
-            padding: 16px;
+            padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 16px;
-            background: var(--bg-color);
+            background: #f6f5fa;
         }
 
         .message {
@@ -154,16 +213,6 @@
             border-bottom-left-radius: 4px;
         }
 
-        .recipe-img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            display: block;
-        }
-
         .bubble h1,
         .bubble h2,
         .bubble h3 {
@@ -182,46 +231,7 @@
             margin-bottom: 8px;
         }
 
-        .input-area {
-            padding: 12px 16px;
-            background: #ffffff;
-            border-top: 1px solid #edf2f7;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .input-area input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 1px solid #cbd5e1;
-            border-radius: 24px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .input-area button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .mic-btn {
-            background: var(--primary-light) !important;
-            color: var(--primary) !important;
-            border: 1px solid var(--border-color) !important;
-        }
-
-        .mic-btn.recording {
+        .recording {
             background: #ef4444 !important;
             color: white !important;
             animation: pulse 1.2s infinite;
@@ -244,17 +254,70 @@
             }
         }
 
-        .modal-overlay {
+        /* KARŞILAMA EKRANI */
+        .welcome-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: #fffbf0;
+            border: 2px dashed #ffeaa7;
+            border-radius: 20px;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        .welcome-card .chef-avatar {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-card h3 {
+            margin: 0 0 8px 0;
+            color: #d63031;
+        }
+
+        .welcome-card p {
+            color: #636e72;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .quick-prompts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .prompt-tag {
+            background: white;
+            border: 1px solid #fdcb6e;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2d3436;
+            cursor: pointer;
+        }
+
+        .prompt-tag:hover {
+            background: #fdcb6e;
+            color: white;
+        }
+
+        /* MODAL TASARIMLARI */
+        .modal-overlay,
+        .fav-modal-backdrop {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(6px);
             z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
             padding: 16px;
         }
 
@@ -310,23 +373,6 @@
             cursor: pointer;
         }
 
-        /* --- FAVORİLER MODAL & KART TASARIMI --- */
-        .fav-modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(6px);
-            /* Arka planı buğulaştırır */
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-
         .fav-modal-content {
             background: #ffffff;
             width: 100%;
@@ -361,15 +407,6 @@
             align-items: center;
         }
 
-        .fav-modal-header h3 {
-            margin: 0;
-            font-size: 1.25rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
         .close-fav-btn {
             background: rgba(255, 255, 255, 0.2);
             border: none;
@@ -379,14 +416,6 @@
             border-radius: 50%;
             cursor: pointer;
             font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-        .close-fav-btn:hover {
-            background: rgba(255, 255, 255, 0.35);
         }
 
         .fav-modal-body {
@@ -396,62 +425,31 @@
             background: #f8fafc;
         }
 
-        /* Şık Yemek Kartı */
         .fav-card {
             background: #ffffff;
             border-radius: 16px;
             padding: 18px;
             margin-bottom: 16px;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .fav-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
         }
 
         .fav-card-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            padding-bottom: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
             border-bottom: 1px dashed #e2e8f0;
         }
 
         .fav-card-title {
             font-weight: 700;
             color: #1e293b;
-            font-size: 1.05rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .fav-card-date {
             font-size: 0.75rem;
             color: #94a3b8;
-            background: #f1f5f9;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-weight: 500;
-        }
-
-        .fav-card-content {
-            font-size: 0.9rem;
-            color: #334155;
-            line-height: 1.6;
-            max-height: 180px;
-            overflow-y: auto;
-            padding-right: 6px;
-        }
-
-        .fav-card-actions {
-            margin-top: 14px;
-            display: flex;
-            justify-content: flex-end;
         }
 
         .delete-fav-btn {
@@ -461,9 +459,8 @@
             padding: 6px 14px;
             border-radius: 10px;
             font-size: 0.8rem;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            margin-top: 10px;
         }
 
         .delete-fav-btn:hover {
@@ -471,108 +468,221 @@
             color: white;
         }
 
-        /* Boş Durum Tasarımı */
         .fav-empty-state {
             text-align: center;
             padding: 40px 20px;
             color: #64748b;
         }
 
-        .fav-empty-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .app-layout {
+                height: 100vh;
+                margin: 0;
+                border-radius: 0;
+            }
+        }
+
+        /* SES OKUMA BUTONU STİLLERİ */
+        .speak-control-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .speak-control-btn .icon-play {
+            display: none;
+        }
+
+        .speak-control-btn .icon-pause {
+            display: block;
+        }
+
+        .speak-control-btn.paused .icon-play,
+        .speak-control-btn.stopped .icon-play {
+            display: block;
+        }
+
+        .speak-control-btn.paused .icon-pause,
+        .speak-control-btn.stopped .icon-pause {
+            display: none;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="app-container">
-        <!-- Üst Bar / Header Yanına Favoriler Butonu -->
-        <div class="header-actions"
-            style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
-            <h2>GourmetAI 🍳</h2>
-            <button id="open-fav-btn" onclick="toggleFavoritesModal()"
-                style="background: #ff4757; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold;">
-                ❤️ Favorilerim (<span id="fav-count">0</span>)
-            </button>
-        </div>
-
-        <!-- ŞIK FAVORİLER PENCERESİ (MODAL) -->
-        <div id="favorites-modal" class="fav-modal-backdrop">
-            <div class="fav-modal-content">
-                <div class="fav-modal-header">
-                    <h3>❤️ Kaydedilen Tariflerim</h3>
-                    <button class="close-fav-btn" onclick="toggleFavoritesModal()">✕</button>
-                </div>
-
-                <div class="fav-modal-body" id="favorites-list">
-                    <!-- JavaScript burayı kartlarla dolduracak -->
-                </div>
+    <!-- TARİF EKLEME MODAL PENCERESİ -->
+    <div id="recipeModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>📝 Düz Metin Tarifi Ekle</h2>
+                <button class="close-btn" onclick="closeModal()">✕</button>
             </div>
-        </div>
-
-        <header>
-            <div class="brand">
-                <span class="brand-logo">👨‍🍳</span>
-                <div class="brand-text">
-                    <h1>GourmetAI</h1>
-                    <p>70B Akıllı Mutfak Robotu</p>
-                </div>
-            </div>
-            <button class="upload-btn" onclick="openModal()">📝 Tarif Ekle</button>
-        </header>
-
-        <div class="chat-box" id="chatBox">
-            <div class="message bot">
-                <div class="avatar">👨‍🍳</div>
-                <div class="bubble">
-                    Merhaba! Ben dijital şef asistanınız. İstediğiniz tarifi sorabilir veya sağ üstteki <b>"📝 Tarif
-                        Ekle"</b> butonundan elinizdeki düz metin tarifleri sisteme öğretebilirsiniz! 🍲
-                </div>
-            </div>
-        </div>
-
-        <div class="input-area">
-            <button id="micBtn" class="mic-btn" onclick="toggleSpeech()" title="Sesli Konuş">🎙️</button>
-            <input type="text" id="user-input" placeholder="Tarif yazın veya sesli söyleyin..."
-                onkeydown="if(event.key==='Enter') sendMessage()">
-            <button onclick="sendMessage()" title="Gönder">➔</button>
-            <!-- Durdur / Devam Et Butonu -->
-            <button id="stop-speech-btn" onclick="togglePauseResume()" title="Durdur"
-                style="display: none; background-color: #dc3545; color: white; border: none; border-radius: 50%; width: 42px; height: 42px; font-size: 16px; cursor: pointer; flex-shrink: 0;">
-                ⏸️
-            </button>
+            <textarea id="rawRecipeText"
+                placeholder="Kendi tarifinizi buraya yapıştırın... (Örn: Köfte tarifi: 500gr kıyma, 1 soğan...)"></textarea>
+            <button class="modal-submit" onclick="submitRawRecipe()">Kaydet ve Analiz Et</button>
         </div>
     </div>
 
-    <!-- 🪟 Düz Metin Tarif Ekleme Modalı -->
-    <div class="modal-overlay" id="recipeModal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h2>✨ Düz Metin Tarif Ekle</h2>
-                <button class="close-btn" onclick="closeModal()">✕</button>
+    <!-- FAVORİLER MODAL PENCERESİ -->
+    <div id="favorites-modal" class="fav-modal-backdrop">
+        <div class="fav-modal-content">
+            <div class="fav-modal-header">
+                <h3>❤️ Kaydedilen Tariflerim</h3>
+                <button class="close-fav-btn" onclick="toggleFavoritesModal()">✕</button>
             </div>
-            <p style="font-size: 12px; color: #64748b;">Kopyaladığınız tarifi buraya yapıştırın. Yapay Zeka bunu
-                otomatik anlayıp veritabanına JSON olarak kaydedecektir.</p>
-            <textarea id="rawRecipeText"
-                placeholder="Örn: Menemen Tarifi: 2 yumurta, 2 domates, 1 biber. Biber ve domatesi kavur, yumurtaları kır ve karıştır."></textarea>
-            <button class="modal-submit" onclick="submitRawRecipe()">✨ AI ile Yapılandır ve Kaydet</button>
+            <div class="fav-modal-body" id="favorites-list"></div>
         </div>
+    </div>
+
+    <!-- ANA EKRAN DÜZENİ -->
+    <div class="app-layout">
+
+        <!-- 1. SOL PANEL: ŞEFİN KİLERİ -->
+        <aside class="sidebar">
+            <div class="daily-recipe-card">
+                <span class="badge">🌟 Günün Tarifi</span>
+                <h4>Fırında Soslu Tavuk</h4>
+                <p>Lokum gibi pişen, nar gibi kızarmış pratik akşam yemeği.</p>
+                <button class="daily-btn" onclick="quickAsk('Fırında soslu tavuk tarifi verir misin?')">Tarifi Al ➔</button>
+            </div>
+
+            <div>
+                <h3 class="sidebar-title">⚡ Ne Pişirsek?</h3>
+                <div class="category-chips">
+                    <button class="chip-btn" onclick="quickAsk('15 dakikada yapılabilecek çok pratik yemek tarifleri')">
+                        ⏱️ 15 Dakikalık Tarifler
+                    </button>
+                    <button class="chip-btn" onclick="quickAsk('Elimde olan malzemelerle ne pişirebilirim?')">
+                        🧺 Dolaptakilerle Yemek
+                    </button>
+                    <button class="chip-btn" onclick="quickAsk('Düşük kalorili ve doyurucu diyet akşam yemeği')">
+                        🥗 Düşük Kalorili / Diyet
+                    </button>
+                    <button class="chip-btn" onclick="quickAsk('Çok pratik ve tatlı krizini çözecek bir tatlı tarifi')">
+                        🍰 Pratik Tatlı Krizleri
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 2. SAĞ PANEL: SOHBET ALANI -->
+        <main class="chat-wrapper">
+
+            <!-- ÜST HEADER -->
+            <header
+                style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid #efe8dc; background: #ffffff;">
+                <div>
+                    <h2 style="margin: 0; font-size: 1.3rem; color: #2d3436;">GourmetAI 🍳</h2>
+                    <small style="color: #b2bec3; font-weight: 600;">Akıllı Mutfak Robotu</small>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button onclick="openModal()"
+                        style="background: #fff3e0; color: #e65100; border: 1px solid #ffe0b2; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">
+                        ➕ Tarif Ekle
+                    </button>
+                    <button id="open-fav-btn" onclick="toggleFavoritesModal()"
+                        style="background: #ff7675; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.85rem;">
+                        ❤️ Favorilerim (<span id="fav-count">0</span>)
+                    </button>
+                </div>
+            </header>
+
+            <!-- SOHBET KUTUSU -->
+            <div id="chatBox" class="chat-box">
+
+                <!-- Karşılama Ekranı -->
+                <div id="welcome-card" class="welcome-card">
+                    <div class="chef-avatar">👨‍🍳</div>
+                    <h3>GourmetAI Mutfağına Hoş Geldiniz!</h3>
+                    <p>Bugün ne pişirmek istersiniz? Aşağıdaki hazır fikirlerden birine tıklayabilir veya bana aklınızdaki malzemeleri yazabilirsiniz.</p>
+                    <div class="quick-prompts">
+                        <button class="prompt-tag" onclick="quickAsk('Akşama ne pişirsem?')">🤔 Akşama ne pişirsem?</button>
+                        <button class="prompt-tag" onclick="quickAsk('Pratik köfte tarifi')">🧆 Pratik Köfte Tarifi</button>
+                        <button class="prompt-tag" onclick="quickAsk('Nefis Kremalı Makarna')">🍝 Kremalı Makarna</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ALT MESAJ/GİRDİ ALANI -->
+            <div style="padding: 16px 24px; background: #ffffff; border-top: 1px solid #efe8dc; display: flex; gap: 12px; align-items: center;">
+                
+                <!-- MİKROFON BUTONU (toggleListening tetikler) -->
+                <button id="micBtn" onclick="toggleListening()"
+                    style="background: #fff8f0; border: 1px solid #ffeaa7; padding: 12px 14px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; transition: background 0.2s;">
+                    🎙️
+                </button>
+
+                <input type="text" id="userInput" placeholder="Tarif yazın veya sesli söyleyin..."
+                    style="flex: 1; padding: 14px 22px; border: 1px solid #e2dcd0; border-radius: 30px; font-size: 0.95rem; outline: none; background: #faf8f5; color: #2d3436;"
+                    onkeypress="if(event.key === 'Enter') sendMessage()" />
+
+                <button onclick="sendMessage()"
+                    style="background: #e17055; color: white; border: none; padding: 12px 24px; border-radius: 30px; font-size: 0.95rem; cursor: pointer; font-weight: bold; transition: background 0.2s;">
+                    Gönder ➔
+                </button>
+
+                <!-- SESLİ OKUMA DURDUR/DEVAM ET BUTONU -->
+                <button id="speak-control-btn" class="speak-control-btn stopped" onclick="toggleSpeech()">
+                    <span class="icon-pause">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </span>
+                    <span class="icon-play">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                    </span>
+                </button>
+
+            </div>
+
+        </main>
     </div>
 
     <script>
+        let chatHistory = [];
+        let speechControlBtn = null;
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js');
+                navigator.serviceWorker.register('/sw.js').catch(() => { });
             });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            speechControlBtn = document.getElementById('speak-control-btn');
+            updateFavCount();
+        });
+
+        // Hızlı Soru Sorma
+        function quickAsk(text) {
+            const inputField = document.getElementById("userInput");
+            if (inputField) {
+                inputField.value = text;
+                sendMessage();
+            }
         }
 
         // Modal Kontrolleri
         function openModal() { document.getElementById("recipeModal").style.display = "flex"; }
         function closeModal() { document.getElementById("recipeModal").style.display = "none"; }
 
-        // 🤖 Düz Metni AI ile JSON'a Çevirip Kaydetme
         async function submitRawRecipe() {
             const textInput = document.getElementById("rawRecipeText").value.trim();
             if (!textInput) {
@@ -606,7 +716,7 @@
             }
         }
 
-        // 🎙️ Web Speech API (Eller Serbest Sesli Komut)
+        // 🎙️ Ses Tanıma (Speech Recognition - Konuşmayı Yazıya Dökme)
         let recognition = null;
         let isListening = false;
 
@@ -619,7 +729,7 @@
 
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
-                document.getElementById("user-input").value = transcript;
+                document.getElementById("userInput").value = transcript;
                 stopListeningUI();
                 sendMessage();
             };
@@ -628,9 +738,9 @@
             recognition.onend = () => { stopListeningUI(); };
         }
 
-        function toggleSpeech() {
+        function toggleListening() {
             if (!recognition) {
-                alert("⚠️ Tarayıcınız ses tanıma özelliğini desteklemiyor.");
+                alert("Tarayıcınız ses tanıma özelliğini desteklemiyor.");
                 return;
             }
             if (isListening) {
@@ -648,30 +758,117 @@
                 const micBtn = document.getElementById("micBtn");
                 micBtn.classList.add("recording");
                 micBtn.innerHTML = "🔴";
-                document.getElementById("user-input").placeholder = "Sizi dinliyorum, konuşun...";
+                document.getElementById("userInput").placeholder = "Sizi dinliyorum, konuşun...";
             } catch (err) { }
         }
 
         function stopListeningUI() {
             isListening = false;
             const micBtn = document.getElementById("micBtn");
-            micBtn.classList.remove("recording");
-            micBtn.innerHTML = "🎙️";
-            document.getElementById("user-input").placeholder = "Tarif yazın veya sesli söyleyin...";
+            if (micBtn) {
+                micBtn.classList.remove("recording");
+                micBtn.innerHTML = "🎙️";
+            }
+            const userInput = document.getElementById("userInput");
+            if (userInput) {
+                userInput.placeholder = "Tarif yazın veya sesli söyleyin...";
+            }
         }
 
-        // Sayfanın en üstünde chatHistory tanımlı olmalı:
-        let chatHistory = [];
+        // 🔊 Seslendirme Durdur/Devam Et Butonu Kontrolü
+        function toggleSpeech() {
+            if (!('speechSynthesis' in window)) return;
 
+            if (window.speechSynthesis.speaking) {
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                    updateSpeakBtnUI('playing');
+                } else {
+                    window.speechSynthesis.pause();
+                    updateSpeakBtnUI('paused');
+                }
+            }
+        }
+
+        function updateSpeakBtnUI(state) {
+            if (!speechControlBtn) speechControlBtn = document.getElementById('speak-control-btn');
+            if (!speechControlBtn) return;
+
+            switch (state) {
+                case 'playing':
+                    speechControlBtn.classList.remove('paused', 'stopped');
+                    break;
+                case 'paused':
+                    speechControlBtn.classList.add('paused');
+                    speechControlBtn.classList.remove('stopped');
+                    break;
+                case 'stopped':
+                case 'finished':
+                    speechControlBtn.classList.add('stopped');
+                    speechControlBtn.classList.remove('paused');
+                    break;
+            }
+        }
+
+        // 🔊 Seslendirme ve Metin Okuma (TTS)
+        let turkishVoice = null;
+        function loadVoices() {
+            if (!('speechSynthesis' in window)) return;
+            const voices = window.speechSynthesis.getVoices();
+            turkishVoice = voices.find(v => v.lang.includes('tr') || v.lang.includes('TR')) || null;
+        }
+
+        if ('speechSynthesis' in window) {
+            loadVoices();
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        function unlockAudio() {
+            if (!('speechSynthesis' in window)) return;
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
+        }
+
+        function cleanTextForSpeech(text) {
+            return text
+                .replace(/<[^>]*>/g, '')
+                .replace(/[*_#`~]/g, '')
+                .trim();
+        }
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            
+            window.speechSynthesis.cancel();
+            
+            const cleaned = cleanTextForSpeech(text);
+            if (!cleaned) return;
+
+            const utterance = new SpeechSynthesisUtterance(cleaned);
+            if (turkishVoice) utterance.voice = turkishVoice;
+            utterance.lang = 'tr-TR';
+            utterance.rate = 1.0;
+
+            utterance.onstart = () => updateSpeakBtnUI('playing');
+            utterance.onend = () => updateSpeakBtnUI('finished');
+            utterance.onerror = () => updateSpeakBtnUI('stopped');
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Mesaj Gönderme
         async function sendMessage() {
-            // 🔓 TARAYICI SES KİLİDİNİ ANINDA AÇ (Fetch öncesi tıklama anında)
             unlockAudio();
 
-            const inputField = document.getElementById("user-input");
+            const inputField = document.getElementById("userInput");
             if (!inputField) return;
 
             const message = inputField.value.trim();
             if (!message) return;
+
+            const welcomeCard = document.getElementById("welcome-card");
+            if (welcomeCard) welcomeCard.style.display = "none";
 
             appendMessage("user", message);
             inputField.value = "";
@@ -686,15 +883,17 @@
                 });
 
                 const data = await response.json();
-
                 removeThinkingIndicator();
-                appendBotResponse(data.reply, data.image_url);
 
-                // 🔊 CEVABI SESLİ OKU
-                speakText(data.reply);
+                if (data.reply) {
+                    appendBotResponse(data.reply, data.image_url);
+                    speakText(data.reply);
 
-                chatHistory.push({ role: "user", content: message });
-                chatHistory.push({ role: "assistant", content: data.reply });
+                    chatHistory.push({ role: "user", content: message });
+                    chatHistory.push({ role: "assistant", content: data.reply });
+                } else {
+                    appendMessage("bot", "⚠️ Sunucudan yanıt alınamadı.");
+                }
 
             } catch (error) {
                 console.error("Hata:", error);
@@ -703,27 +902,23 @@
             }
         }
 
-        // ⏳ Yükleme Baloncuğu Kontrolleri
         function showThinkingIndicator() {
-            removeThinkingIndicator(); // Varsa eskisini temizle
+            removeThinkingIndicator();
             const chatBox = document.getElementById("chatBox");
             const html = `
-        <div class="message bot" id="thinking-indicator">
-            <div class="avatar">👨‍🍳</div>
-            <div class="bubble"><i>Şef düşünüyor... 👨‍🍳</i></div>
-        </div>`;
+            <div class="message bot" id="thinking-indicator">
+                <div class="avatar">👨‍🍳</div>
+                <div class="bubble"><i>Şef düşünüyor... 👨‍🍳</i></div>
+            </div>`;
             chatBox.insertAdjacentHTML("beforeend", html);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         function removeThinkingIndicator() {
             const indicator = document.getElementById("thinking-indicator");
-            if (indicator) {
-                indicator.remove();
-            }
+            if (indicator) indicator.remove();
         }
 
-        // Mesaj Eklemeyi Sağlayan Yardımcı Fonksiyonlar
         function appendMessage(sender, text) {
             const chatBox = document.getElementById("chatBox");
             const msgId = "msg-" + Date.now();
@@ -737,31 +932,27 @@
         function appendBotResponse(reply, imageUrl) {
             const chatBox = document.getElementById("chatBox");
 
-            // Resim varsa img etiketi oluştur
             let imgHtml = "";
             if (imageUrl && imageUrl.trim() !== "") {
-                imgHtml = `<img src="${imageUrl}" alt="Yemek Görseli" class="recipe-image" style="width:100%; max-height:300px; object-fit:cover; border-radius:12px; margin-bottom:10px;" />`;
+                imgHtml = `<img src="${imageUrl}" alt="Yemek Görseli" style="width:100%; max-height:250px; object-fit:cover; border-radius:12px; margin-bottom:10px;" />`;
             }
 
-            // Butonu yakalamak için benzersiz bir ID üretiyoruz
             const msgId = "fav-btn-" + Date.now();
 
             const html = `
-<div class="message bot">
-    <div class="avatar">👨‍🍳</div>
-    <div class="bubble">
-        ${imgHtml}
-        <div>${marked.parse(reply)}</div>
-        <!-- FAVORİ BUTONU -->
-        <button id="${msgId}" style="margin-top: 10px; background: #ffeaa7; border: 1px solid #fdcb6e; padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: bold; color: #d63031; display: inline-flex; align-items: center; gap: 4px;">
-            ❤️ Favorilere Ekle
-        </button>
-    </div>
-</div>`;
+            <div class="message bot">
+                <div class="avatar">👨‍🍳</div>
+                <div class="bubble">
+                    ${imgHtml}
+                    <div>${marked.parse(reply)}</div>
+                    <button id="${msgId}" style="margin-top: 10px; background: #ffeaa7; border: 1px solid #fdcb6e; padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: bold; color: #d63031; display: inline-flex; align-items: center; gap: 4px;">
+                        ❤️ Favorilere Ekle
+                    </button>
+                </div>
+            </div>`;
 
             chatBox.insertAdjacentHTML("beforeend", html);
 
-            // Buton ekrana basıldıktan sonra tıklama olayını güvenle bağlıyoruz
             const favBtn = document.getElementById(msgId);
             if (favBtn) {
                 favBtn.addEventListener("click", function () {
@@ -772,220 +963,75 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // 1. Türkçe ses paketini yükleme (Chrome için async kontrol)
-        function loadVoices() {
-            if (!('speechSynthesis' in window)) return;
-            const voices = window.speechSynthesis.getVoices();
-            turkishVoice = voices.find(v => v.lang.includes('tr') || v.lang.includes('TR')) || null;
+        // ❤️ Favori Sistemi Yönetimi
+        function getFavorites() {
+            return JSON.parse(localStorage.getItem("gourmet_favorites") || "[]");
         }
 
-        if ('speechSynthesis' in window) {
-            loadVoices();
-            window.speechSynthesis.onvoiceschanged = loadVoices;
+        function saveFavorites(favs) {
+            localStorage.setItem("gourmet_favorites", JSON.stringify(favs));
+            updateFavCount();
         }
 
-        // 2. Tarayıcının Ses Engeli Kilidini Açma (Tıklama anında çağrılır)
-        function unlockAudio() {
-            if (!('speechSynthesis' in window)) return;
-            // Tarayıcıya "kullanıcı ses izni verdi" dedirtmek için sessiz bir tetikleme yapıyoruz
-            if (window.speechSynthesis.paused) {
-                window.speechSynthesis.resume();
-            }
-        }
-
-        // 3. Metin Temizleme
-        function cleanTextForSpeech(text) {
-            return text
-                .replace(/<[^>]*>/g, '')                     // HTML etiketleri
-                .replace(/[\*\_~`#]/g, '')                   // Markdown (*) (#)
-                .replace(/^[0-9]+\.\s+/gm, '')               // Liste numaraları
-                .replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '') // Emojiler
-                .trim();
-        }
-
-        // 4. Şefin Sesli Okuma Fonksiyonu
-        function speakText(text) {
-            if (!('speechSynthesis' in window)) return;
-
-            const cleanText = cleanTextForSpeech(text);
-            if (!cleanText) return;
-
-            // Önceki seslendirmeyi iptal et
-            window.speechSynthesis.cancel();
-
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = 'tr-TR';
-            utterance.rate = 1.0;  // Okuma hızı
-            utterance.pitch = 1.0; // Ses tonu
-
-            if (turkishVoice) {
-                utterance.voice = turkishVoice;
-            }
-
-            if (turkishVoice) {
-                utterance.voice = turkishVoice;
-            }
-
-            // --- YENİ EKLENECEK KISIM (BAŞLA) ---
-            const stopBtn = document.getElementById("stop-speech-btn");
-
-            // Okuma başlayınca butonu 'Durdur' (kırmızı) olarak göster
-            utterance.onstart = function () {
-                const btn = document.getElementById("stop-speech-btn");
-                if (btn) {
-                    btn.style.display = "inline-block";
-                    btn.innerHTML = "⏸️";
-                    btn.title = "Durdur";
-                    btn.style.backgroundColor = "#dc3545";
-                }
-            };
-
-            // Tarif TAMAMEN BİTTİĞİNDE butonu gizle
-            utterance.onend = function () {
-                const btn = document.getElementById("stop-speech-btn");
-                if (btn) btn.style.display = "none";
-            };
-
-            // Hata durumunda da gizle
-            utterance.onerror = function () {
-                const btn = document.getElementById("stop-speech-btn");
-                if (btn) btn.style.display = "none";
-            };
-
-            window.speechSynthesis.speak(utterance);
-
-        }
-
-
-        // Duraklat / Devam Et Fonksiyonu
-        function togglePauseResume() {
-            const btn = document.getElementById("stop-speech-btn");
-            if (!('speechSynthesis' in window)) return;
-
-            if (window.speechSynthesis.paused) {
-                window.speechSynthesis.resume();
-                if (btn) {
-                    btn.innerHTML = "⏸️";
-                    btn.title = "Durdur";
-                    btn.style.backgroundColor = "#dc3545";
-                }
-            } else if (window.speechSynthesis.speaking) {
-                window.speechSynthesis.pause();
-                if (btn) {
-                    btn.innerHTML = "▶️";
-                    btn.title = "Devam Et";
-                    btn.style.backgroundColor = "#28a745";
-                }
-            }
-        }
-
-        // Sayfa yüklendiğinde favorileri hafızadan yükle
-        document.addEventListener("DOMContentLoaded", () => {
-            renderFavorites();
-        });
-
-        // Favoriler Modalı Aç/Kapa
-        function toggleFavoritesModal() {
-            const modal = document.getElementById("favorites-modal");
-            if (modal.style.display === "none" || modal.style.display === "") {
-                modal.style.display = "flex";
-                renderFavorites();
-            } else {
-                modal.style.display = "none";
-            }
+        function updateFavCount() {
+            const favs = getFavorites();
+            const countElem = document.getElementById("fav-count");
+            if (countElem) countElem.innerText = favs.length;
         }
 
         function saveToFavorites(title, content) {
-            let favorites = JSON.parse(localStorage.getItem("gourmet_favorites") || "[]");
-
-            // 1. DÜZELTME: Başlığa göre değil, İÇERİĞE göre kontrol et!
-            const isAlreadySaved = favorites.some(fav => fav.content.trim() === content.trim());
-            if (isAlreadySaved) {
-                alert("Bu tarif zaten favorilerinizde ekli!");
-                return;
-            }
-
-            // 2. BONUS: Tarif metninin ilk satırını otomatik BAŞLIK yap
-            let recipeTitle = title;
-            if (content) {
-                // İlk satırı al, # veya * gibi sembolleri temizle
-                const firstLine = content.trim().split("\n")[0].replace(/[#*]/g, "").trim();
-                if (firstLine.length > 0 && firstLine.length < 60) {
-                    recipeTitle = firstLine;
-                }
-            }
-
-            const newFav = {
+            const favs = getFavorites();
+            favs.push({
                 id: Date.now(),
-                title: recipeTitle,
+                title: title,
                 content: content,
-                date: new Date().toLocaleDateString("tr-TR")
-            };
-
-            favorites.push(newFav);
-            localStorage.setItem("gourmet_favorites", JSON.stringify(favorites));
+                date: new Date().toLocaleDateString('tr-TR')
+            });
+            saveFavorites(favs);
             alert("Tarif favorilere eklendi! ❤️");
-
-            // Favori listesini ve sayacı güncelle
-            renderFavorites();
         }
-        
-        // 2. Favorilerden Sil
-        function removeFavorite(id) {
-            let favorites = JSON.parse(localStorage.getItem("gourmet_favorites") || "[]");
-            favorites = favorites.filter(fav => fav.id !== id);
-            localStorage.setItem("gourmet_favorites", JSON.stringify(favorites));
-            renderFavorites();
+
+        function toggleFavoritesModal() {
+            const modal = document.getElementById("favorites-modal");
+            if (!modal) return;
+            
+            if (modal.style.display === "flex") {
+                modal.style.display = "none";
+            } else {
+                renderFavorites();
+                modal.style.display = "flex";
+            }
         }
 
         function renderFavorites() {
-            const favorites = JSON.parse(localStorage.getItem("gourmet_favorites") || "[]");
-            const favListContainer = document.getElementById("favorites-list");
-            const favCountSpan = document.getElementById("fav-count");
+            const listElem = document.getElementById("favorites-list");
+            if (!listElem) return;
 
-            if (favCountSpan) favCountSpan.innerText = favorites.length;
-            if (!favListContainer) return;
-
-            // Eğer favori yoksa şık bir boş durum göster
-            if (favorites.length === 0) {
-                favListContainer.innerHTML = `
-            <div class="fav-empty-state">
-                <div class="fav-empty-icon">📖</div>
-                <h4 style="margin: 0 0 8px 0; color: #334155;">Henüz Tarif Kaydetmediniz</h4>
-                <p style="margin: 0; font-size: 0.85rem;">Beğendiğiniz tariflerin altındaki <b>"❤️ Favorilere Ekle"</b> butonuna basarak buraya kaydedebilirsiniz.</p>
-            </div>
-        `;
+            const favs = getFavorites();
+            if (favs.length === 0) {
+                listElem.innerHTML = `<div class="fav-empty-state">Henüz kaydedilmiş favori tarifiniz yok.</div>`;
                 return;
             }
 
-            // Favori kartlarını oluştur
-            favListContainer.innerHTML = favorites.map(fav => {
-                // Eğer marked.js kütüphanesi varsa tarif içeriğini biçimlendir, yoksa düz metin bas
-                const formattedContent = (typeof marked !== 'undefined') ? marked.parse(fav.content) : fav.content;
-
-                return `
-            <div class="fav-card">
-                <div class="fav-card-header">
-                    <div class="fav-card-title">
-                        <span>🍳</span> ${fav.title || 'Aşçı Tarifi'}
+            listElem.innerHTML = favs.map(item => `
+                <div class="fav-card">
+                    <div class="fav-card-header">
+                        <span class="fav-card-title">${item.title}</span>
+                        <span class="fav-card-date">${item.date}</span>
                     </div>
-                    <span class="fav-card-date">${fav.date}</span>
+                    <div>${marked.parse(item.content)}</div>
+                    <button class="delete-fav-btn" onclick="deleteFavorite(${item.id})">Sil 🗑️</button>
                 </div>
-                <div class="fav-card-content">
-                    ${formattedContent}
-                </div>
-                <div class="fav-card-actions">
-                    <button class="delete-fav-btn" onclick="removeFavorite(${fav.id})">
-                        🗑️ Tarifi Sil
-                    </button>
-                </div>
-            </div>
-        `;
-            }).join("");
+            `).join('');
         }
 
+        function deleteFavorite(id) {
+            let favs = getFavorites();
+            favs = favs.filter(f => f.id !== id);
+            saveFavorites(favs);
+            renderFavorites();
+        }
     </script>
-
 </body>
 
 </html>
