@@ -9,6 +9,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#e65100">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1830/1830839.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧑‍🍳</text></svg>">
 
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
@@ -557,7 +558,8 @@
                 <span class="badge">🌟 Günün Tarifi</span>
                 <h4>Fırında Soslu Tavuk</h4>
                 <p>Lokum gibi pişen, nar gibi kızarmış pratik akşam yemeği.</p>
-                <button class="daily-btn" onclick="quickAsk('Fırında soslu tavuk tarifi verir misin?')">Tarifi Al ➔</button>
+                <button class="daily-btn" onclick="quickAsk('Fırında soslu tavuk tarifi verir misin?')">Tarifi Al
+                    ➔</button>
             </div>
 
             <div>
@@ -608,19 +610,24 @@
                 <div id="welcome-card" class="welcome-card">
                     <div class="chef-avatar">👨‍🍳</div>
                     <h3>GourmetAI Mutfağına Hoş Geldiniz!</h3>
-                    <p>Bugün ne pişirmek istersiniz? Aşağıdaki hazır fikirlerden birine tıklayabilir veya bana aklınızdaki malzemeleri yazabilirsiniz.</p>
+                    <p>Bugün ne pişirmek istersiniz? Aşağıdaki hazır fikirlerden birine tıklayabilir veya bana
+                        aklınızdaki malzemeleri yazabilirsiniz.</p>
                     <div class="quick-prompts">
-                        <button class="prompt-tag" onclick="quickAsk('Akşama ne pişirsem?')">🤔 Akşama ne pişirsem?</button>
-                        <button class="prompt-tag" onclick="quickAsk('Pratik köfte tarifi')">🧆 Pratik Köfte Tarifi</button>
-                        <button class="prompt-tag" onclick="quickAsk('Nefis Kremalı Makarna')">🍝 Kremalı Makarna</button>
+                        <button class="prompt-tag" onclick="quickAsk('Akşama ne pişirsem?')">🤔 Akşama ne
+                            pişirsem?</button>
+                        <button class="prompt-tag" onclick="quickAsk('Pratik köfte tarifi')">🧆 Pratik Köfte
+                            Tarifi</button>
+                        <button class="prompt-tag" onclick="quickAsk('Nefis Kremalı Makarna')">🍝 Kremalı
+                            Makarna</button>
                     </div>
                 </div>
 
             </div>
 
             <!-- ALT MESAJ/GİRDİ ALANI -->
-            <div style="padding: 16px 24px; background: #ffffff; border-top: 1px solid #efe8dc; display: flex; gap: 12px; align-items: center;">
-                
+            <div
+                style="padding: 16px 24px; background: #ffffff; border-top: 1px solid #efe8dc; display: flex; gap: 12px; align-items: center;">
+
                 <!-- MİKROFON BUTONU (toggleListening tetikler) -->
                 <button id="micBtn" onclick="toggleListening()"
                     style="background: #fff8f0; border: 1px solid #ffeaa7; padding: 12px 14px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; transition: background 0.2s;">
@@ -839,9 +846,9 @@
 
         function speakText(text) {
             if (!('speechSynthesis' in window)) return;
-            
+
             window.speechSynthesis.cancel();
-            
+
             const cleaned = cleanTextForSpeech(text);
             if (!cleaned) return;
 
@@ -994,7 +1001,7 @@
         function toggleFavoritesModal() {
             const modal = document.getElementById("favorites-modal");
             if (!modal) return;
-            
+
             if (modal.style.display === "flex") {
                 modal.style.display = "none";
             } else {
